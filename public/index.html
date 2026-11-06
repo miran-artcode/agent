@@ -6,55 +6,193 @@
 <title>코덱스로 업무 자동화 편리하게 만들기</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
-:root{--paper:#F4F5F6;--card:#FBFBFA;--ink:#1E2433;--soft:#4A5263;--line:#D5D9E0;--acc:#B64A1E}
-@media (prefers-color-scheme:dark){:root{--paper:#161A22;--card:#1E2433;--ink:#E9ECF1;--soft:#B5BCC9;--line:#39414F;--acc:#E8915F}}
+:root{--paper:#F4F5F6;--card:#FFFFFF;--ink:#1E2433;--soft:#4A5263;--line:#D5D9E0;--acc:#B64A1E;--accbg:#F8E9E1;--ok:#2F6B4F;--dark:#1E2433;--onDark:#E9ECF1}
+@media (prefers-color-scheme:dark){:root{--paper:#14181F;--card:#1E2433;--ink:#E9ECF1;--soft:#B5BCC9;--line:#39414F;--acc:#E8915F;--accbg:#3A2A22;--ok:#7CC4A0;--dark:#0E1116}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans KR","Malgun Gothic",sans-serif;font-size:17px;line-height:1.7;word-break:keep-all}
-main{max-width:860px;margin:0 auto;padding:56px 20px 72px}
-.eyebrow{font-size:14px;color:var(--acc);font-weight:500;margin:0 0 10px}
-h1{font-family:"Hahmlet",serif;font-weight:600;font-size:clamp(30px,6vw,46px);line-height:1.25;margin:0 0 14px;text-wrap:balance}
-.lede{color:var(--soft);margin:0 0 40px;max-width:40em}
-h2{font-size:15px;font-weight:700;color:var(--soft);margin:36px 0 12px}
-ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
-li{border-bottom:1px solid var(--line)}
-li a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:baseline;padding:16px 4px;color:inherit;text-decoration:none}
-li a:hover b,li a:focus-visible b{color:var(--acc)}
-li a:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
-li b{font-size:19px;font-weight:700}
-li span{grid-column:1;color:var(--soft);font-size:15px}
-li i{grid-row:1;grid-column:2;font-style:normal;font-size:14px;color:var(--acc);white-space:nowrap}
-footer{margin-top:48px;font-size:14px;color:var(--soft)}
+html{scroll-behavior:smooth;scroll-padding-top:64px}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Noto Sans KR","Malgun Gothic",sans-serif;font-size:17px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word}
+a{color:var(--acc)}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.wrap{max-width:980px;margin:0 auto;padding:0 20px}
+header{padding:48px 0 28px}
+.eyebrow{font-size:14px;color:var(--acc);font-weight:500;margin:0 0 8px}
+h1{font-family:"Hahmlet",serif;font-weight:600;font-size:clamp(28px,6vw,44px);line-height:1.25;margin:0 0 12px;text-wrap:balance}
+.lede{color:var(--soft);margin:0;max-width:38em}
+nav{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--line)}
+nav ol{list-style:none;margin:0 auto;padding:10px 20px;max-width:980px;display:flex;gap:8px;overflow-x:auto}
+nav a{display:flex;gap:8px;align-items:center;white-space:nowrap;text-decoration:none;color:var(--ink);font-size:15px;font-weight:500;padding:6px 14px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+nav a b{color:var(--acc)}
+nav a:hover{border-color:var(--acc)}
+section{padding:44px 0 8px}
+h2{font-family:"Hahmlet",serif;font-weight:600;font-size:clamp(24px,4vw,32px);line-height:1.3;margin:0 0 6px}
+h2 small{display:block;font-family:"Noto Sans KR",sans-serif;font-size:14px;font-weight:500;color:var(--acc);margin-bottom:4px}
+.sub{color:var(--soft);margin:0 0 20px}
+h3{font-size:19px;margin:0 0 6px}
+.dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;margin:0 0 24px}
+.dl a{display:block;padding:16px 18px;border:1px solid var(--line);border-radius:12px;background:var(--card);text-decoration:none;color:var(--ink)}
+.dl a:hover{border-color:var(--acc)}
+.dl b{display:block;font-size:18px}
+.dl span{font-size:14px;color:var(--soft)}
+.dl i{font-style:normal;font-size:14px;color:var(--acc);font-weight:500}
+.todo{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.todo li{border-bottom:1px solid var(--line)}
+.todo label{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px;padding:12px 4px;cursor:pointer;align-items:start}
+.todo input{width:22px;height:22px;margin:3px 0 0;accent-color:var(--ok)}
+.todo small{display:block;color:var(--soft);font-size:14.5px}
+.todo input:checked + span b{color:var(--ok)}
+.count{font-size:14px;color:var(--soft);margin:10px 0 0}
+.shots{display:grid;grid-template-columns:minmax(0,1fr);gap:32px}
+figure{margin:0}
+figure button{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+figure img{display:block;width:100%;height:auto}
+figcaption{margin-top:8px}
+figcaption b{display:block;font-size:17px}
+figcaption span{font-size:14.5px;color:var(--soft)}
+.said{margin-top:6px;font-size:14.5px;background:var(--dark);color:var(--onDark);border-radius:8px;padding:8px 12px}
+.said em{font-style:normal;color:#E8915F;font-weight:500;margin-right:6px}
+.lab{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:20px 22px;margin:0 0 16px;display:grid;gap:12px}
+.lab .no{font-size:14px;font-weight:700;color:var(--acc)}
+.lab p{margin:0}
+.lab .meta{font-size:14.5px;color:var(--soft)}
+.lab .meta b{color:var(--ink);font-weight:500}
+.say{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start;background:var(--dark);color:var(--onDark);border-radius:10px;padding:14px 16px}
+.say p{font-size:16px;line-height:1.65}
+.say button{border:1px solid #5a6375;background:transparent;color:var(--onDark);border-radius:6px;padding:3px 12px;font-size:14px;font-weight:500}
+.say button.done{border-color:#7CC4A0;color:#7CC4A0}
+.note{font-size:14.5px;background:var(--accbg);border-radius:8px;padding:8px 12px}
+.care{margin:0;padding-left:22px;display:grid;gap:8px}
+footer{padding:48px 0 64px;font-size:14px;color:var(--soft)}
+dialog{border:0;padding:0;background:transparent;max-width:96vw;max-height:96vh}
+dialog::backdrop{background:rgba(10,12,16,.82)}
+dialog img{display:block;max-width:96vw;max-height:88vh;border-radius:8px;background:#fff}
+dialog form{display:flex;justify-content:space-between;align-items:center;gap:12px;color:#fff;font-size:15px;padding:8px 2px}
+dialog button{border:1px solid #fff;background:transparent;color:#fff;border-radius:6px;padding:4px 14px}
 </style>
 </head>
 <body>
-<main>
+<div class="wrap">
+<header>
 <p class="eyebrow">2026 찾아가는 학교컨설팅 · 오남중학교 맞춤형 연수</p>
 <h1>코덱스로 업무 자동화 편리하게 만들기</h1>
-<p class="lede">연수에서 보는 자료와 실습에 쓰는 파일을 모았습니다. 위에서부터 차례로 엽니다.</p>
+<p class="lede">파일 정리와 서류 작업을 AI에게 말로 맡기는 연수입니다. 아래 순서대로 따라 하시면 됩니다.</p>
+</header>
+</div>
 
-<h2>연수 자료</h2>
-<ul>
-<li><a href="slides.pdf"><b>사례 슬라이드</b><i>PDF 열기</i><span>AI에게 맡긴 파일 정리, 지원서, 포트폴리오 사이트. 22쪽</span></a></li>
-<li><a href="guide/"><b>Codex 실습 안내서</b><i>열기</i><span>설치부터 실습 A~F까지 따라 하기. 90분</span></a></li>
+<nav aria-label="연수 순서"><ol>
+<li><a href="#ready"><b>1</b>준비</a></li>
+<li><a href="#cases"><b>2</b>사례 보기</a></li>
+<li><a href="#labs"><b>3</b>실습</a></li>
+<li><a href="#care"><b>4</b>주의할 점</a></li>
+</ol></nav>
+
+<div class="wrap">
+
+<section id="ready">
+<h2><small>1단계</small>준비</h2>
+<p class="sub">파일 두 개를 받고, 아래 순서대로 체크해 주세요.</p>
+<div class="dl">
+<a href="downloads/oname-handout.zip" download="배부용_오남중학교.zip"><b>실습 파일</b><span>실습 1~3에 쓰는 파일 27개. 학생 이름은 모두 가명입니다</span><br><i>zip 받기</i></a>
+<a href="downloads/oname-codex-practice.zip" download="오남중_코덱스_연습폴더.zip"><b>연습 폴더</b><span>폴더 정리 연습용 가상 파일 27개</span><br><i>zip 받기</i></a>
+<a href="https://chatgpt.com/download/"><b>ChatGPT 앱</b><span>코덱스는 이 앱 안에 들어 있습니다</span><br><i>설치 페이지 열기</i></a>
+</div>
+<ul class="todo" id="todo">
+<li><label><input type="checkbox"><span><b>ChatGPT 앱을 설치하고 로그인한다</b><small>평소 쓰는 ChatGPT 계정으로 로그인합니다.</small></span></label></li>
+<li><label><input type="checkbox"><span><b>왼쪽 위에서 Codex로 바꾼다</b><small>‘ChatGPT ▾’를 누르고 Codex를 고릅니다.</small></span></label></li>
+<li><label><input type="checkbox"><span><b>실습 파일을 바탕화면에 푼다</b><small>받은 zip을 오른쪽 클릭하고 ‘압축 풀기’를 누릅니다.</small></span></label></li>
+<li><label><input type="checkbox"><span><b>폴더를 연결한다</b><small>Projects → Add new project → ‘배부용_오남중학교’ 폴더를 고릅니다.</small></span></label></li>
+<li><label><input type="checkbox"><span><b>권한을 Ask for approval로 둔다</b><small>입력창 아래에서 고릅니다. 폴더 밖 일은 먼저 물어보게 됩니다.</small></span></label></li>
+<li><label><input type="checkbox"><span><b>Canva를 연결한다 (실습 3에 필요)</b><small>Plugins에서 Canva를 찾아 설치하고 로그인합니다.</small></span></label></li>
 </ul>
+<p class="count" id="count"></p>
+<p class="sub" style="margin-top:14px">누를 곳을 그림으로 보고 싶으면 <a href="guide/">실습 안내서</a>를 여세요.</p>
+</section>
 
-<h2>내려받기</h2>
-<ul>
-<li><a href="downloads/oname-codex-practice.zip" download="오남중_코덱스_연습폴더.zip"><b>연습 폴더</b><i>zip 받기</i><span>폴더 정리 연습용 가상 파일 27개. 실제 학생 정보는 없습니다</span></a></li>
-<li><a href="https://chatgpt.com/download/"><b>ChatGPT 앱 설치</b><i>설치 페이지</i><span>코덱스는 ChatGPT 데스크톱 앱 안에 있습니다</span></a></li>
+<section id="cases">
+<h2><small>2단계</small>사례 보기</h2>
+<p class="sub">제가 AI에게 실제로 맡겨 본 일입니다. 그림을 누르면 크게 보입니다. <a href="slides.pdf">슬라이드 전체 보기 (PDF)</a></p>
+<div class="shots" id="shots">
+<figure><button type="button"><img src="img/c01.png" alt="메신저로 받은 파일을 시험·평가, 학사·학적 등 폴더 6개로 나눈 탐색기 화면" loading="lazy"></button><figcaption><b>메신저로 받은 파일 121개를 폴더 6개로</b><p class="said"><em>한 말</em>쿨메신저 받은 파일 안에 내용을 전체 정리해줘.</p></figcaption></figure>
+<figure><button type="button"><img src="img/c04.png" alt="정리할 때마다 생긴 기록 파일 12개가 든 폴더" loading="lazy"></button><figcaption><b>어디서 어디로 옮겼는지 기록</b><span>엑셀로 열립니다. 잘못 옮긴 파일은 이 기록을 보고 되돌립니다.</span></figcaption></figure>
+<figure><button type="button"><img src="img/c03.png" alt="중복 파일과 옛 파일을 모아 둔 확인 대기 폴더" loading="lazy"></button><figcaption><b>삭제는 맡기지 않습니다</b><span>중복 파일은 이 폴더로 옮겨 두고, 제가 확인한 뒤 지웁니다.</span></figcaption></figure>
+<figure><button type="button"><img src="img/c05.png" alt="외부강의, 사업참여, 연구·자문 등 폴더 9개로 정리한 실적 폴더" loading="lazy"></button><figcaption><b>실적 자료를 종류별 폴더 9개로</b><p class="said"><em>한 말</em>연도별보다는 사업 특성별로 정리해줘.</p></figcaption></figure>
+<figure><button type="button"><img src="img/c06.png" alt="번호_연도_활동명으로 이름 붙인 외부강의 폴더 31개" loading="lazy"></button><figcaption><b>경력 193건을 표 하나에</b><span>표의 번호와 폴더 번호가 같아서 증빙 자료를 바로 찾습니다.</span></figcaption></figure>
+<figure><button type="button"><img src="img/c10.png" alt="증빙0-01부터 번호를 매긴 지원서 증빙 PDF 46개" loading="lazy"></button><figcaption><b>지원서 증빙 46개에 번호 매기기</b><p class="said"><em>한 말</em>증빙을 찾아서 번호를 넣고 1번부터 파일 하나로 모아줘.</p></figcaption></figure>
+<figure><button type="button"><img src="img/c12.png" alt="최신 파일과 자주 여는 파일 링크를 모은 시작 화면" loading="lazy"></button><figcaption><b>자주 여는 파일을 한 화면에</b><span>누르면 최신 파일이 바로 열립니다.</span></figcaption></figure>
+<figure><button type="button"><img src="img/c07.png" alt="폴더 이름 앞에 00, 10, 20 번호를 붙인 지원 서류 폴더" loading="lazy"></button><figcaption><b>지원 서류 폴더</b><span>폴더 앞에 번호를 붙여 종류별로 묶었습니다.</span></figcaption></figure>
+<figure><button type="button"><img src="img/pf1.png" alt="포트폴리오 2쪽. 이미지로 말하는 교과, 미술실에서 학생의 첫 성공 경험이 시작됩니다" loading="lazy"></button><figcaption><b>포트폴리오 68쪽</b><span>AI가 피그마에 올려 주어 글자를 바로 고칠 수 있습니다.</span></figcaption></figure>
+<figure><button type="button"><img src="img/site.png" alt="포트폴리오 사이트 첫 화면" loading="lazy"></button><figcaption><b>포트폴리오 사이트</b><span>경력 표로 만들었습니다. <a href="https://miran-artcode.github.io/PORTFOLIO/">사이트 열기</a></span></figcaption></figure>
+</div>
+</section>
+
+<section id="labs">
+<h2><small>3단계</small>실습</h2>
+<p class="sub">Codex에서 New chat을 열고, 아래 말을 복사해 붙여 넣습니다. 허락을 구하는 창이 뜨면 읽고 허용합니다.</p>
+
+<div class="lab">
+<span class="no">실습 1</span>
+<h3>반마다 다르게 낸 자료를 표 하나로 모으기</h3>
+<p>오남제 운영 정보를 반마다 엑셀, 카톡 캡처, 워드, 스캔 PDF, 메일로 냈습니다. 이것을 통합 양식 하나에 모읍니다.</p>
+<p class="meta"><b>쓰는 폴더</b> 1. 형식형식 2형식</p>
+<div class="say"><p>‘1. 형식형식 2형식’ 폴더에 있는 6개 반 자료를 모두 읽고, 통합취합양식 엑셀에 채워 줘. 원본은 고치지 말고 새 파일로 저장해 줘. 읽지 못한 칸은 따로 알려 줘.</p><button type="button">복사</button></div>
+<p class="note">확인: 6반 메일 끝에 고친 내용이 2건 있습니다. 표에 반영됐는지 찾아보세요.</p>
+</div>
+
+<div class="lab">
+<span class="no">실습 2</span>
+<h3>채점표로 과세특 초안 쓰기</h3>
+<p>2학년 미술 수행평가 채점표와 학생 자기평가를 읽고 과세특 초안을 씁니다.</p>
+<p class="meta"><b>쓰는 폴더</b> 1-1. CODEX 생기부 생성</p>
+<div class="say"><p>‘1-1. CODEX 생기부 생성’ 폴더의 평가계획서, 채점표 완성본, 자기평가를 읽고 학생별 과세특 초안을 써 줘. ‘과세특 나이스 올릴 파일’ 양식에 채워서 새 파일로 저장해 줘. 점수와 맞지 않는 칭찬은 쓰지 마.</p><button type="button">복사</button></div>
+<p class="note">AI가 쓴 글은 초안입니다. 한 명씩 읽고 고친 뒤에 씁니다.</p>
+</div>
+
+<div class="lab">
+<span class="no">실습 3</span>
+<h3>행사 안내로 포스터와 팜플렛 만들기</h3>
+<p>학교 홈페이지 행사 안내 캡처와 부서별 행사 기획안으로 Canva 시안을 만듭니다.</p>
+<p class="meta"><b>쓰는 폴더</b> 2. 홈페이지 행사 캡쳐본, 3. 팜플렛 만들기 · Canva 연결 필요</p>
+<div class="say"><p>‘2’ 폴더의 행사 안내 캡처 3장을 읽고 행사 이름, 날짜, 장소를 표로 정리해 줘. 그다음 오남제 안내 포스터 시안을 Canva로 만들어 줘.</p><button type="button">복사</button></div>
+<div class="say"><p>‘3’ 폴더의 행사 기획안 가운데 우리 부서 것을 읽고, Canva로 팜플렛 시안을 만들어 줘. 날짜와 장소는 기획안에 적힌 대로 써 줘.</p><button type="button">복사</button></div>
+</div>
+
+<div class="lab">
+<span class="no">시간이 남으면</span>
+<h3>어질러진 폴더 정리 맡기기</h3>
+<p>연습 폴더를 새 프로젝트로 연결한 뒤 부탁합니다.</p>
+<p class="meta"><b>쓰는 폴더</b> 오남중_코덱스_연습폴더</p>
+<div class="say"><p>이 폴더의 파일을 종류별 폴더로 나눠 줘. 아무것도 지우지 말고, 같은 파일은 ‘중복’ 폴더로 옮겨 줘. 옮긴 파일마다 원래 위치와 새 위치를 엑셀 표로 적어 줘. 먼저 계획을 보여 주고 내가 확인하면 실행해 줘.</p><button type="button">복사</button></div>
+</div>
+</section>
+
+<section id="care">
+<h2><small>4단계</small>주의할 점</h2>
+<ul class="care">
+<li>복사본으로 시작합니다. 성적 원본이 든 폴더는 연결하지 않습니다.</li>
+<li>권한은 Ask for approval로 둡니다. Full access는 쓰지 않습니다.</li>
+<li>‘지우지 마’, ‘기록해 줘’를 넣어 부탁합니다.</li>
+<li>‘다 했습니다’라고 해도 결과 파일을 직접 열어 봅니다.</li>
+<li>과세특처럼 AI가 쓴 글은 한 명씩 읽고 고칩니다.</li>
 </ul>
+</section>
 
-<h2>지난 연수</h2>
-<ul>
-<li><a href="vibe/"><b>바이브코딩 학습지</b><i>열기</i><span>코딩 없이 말로 만드는 법. 2026년 6월 19일 연수</span></a></li>
-</ul>
+<footer>강사 황미란 · 서울미술고 미술교사 · 지난 연수: <a href="vibe/">바이브코딩 학습지</a></footer>
+</div>
 
-<h2>예시로 보는 사이트</h2>
-<ul>
-<li><a href="https://miran-artcode.github.io/PORTFOLIO/"><b>포트폴리오 사이트</b><i>열기</i><span>경력 표를 바탕으로 AI와 함께 만든 사이트</span></a></li>
-</ul>
-
-<footer>강사 황미란 · 서울미술고 미술교사</footer>
-</main>
+<dialog id="zoom"><img alt=""><form method="dialog"><span></span><button>닫기</button></form></dialog>
+<script>
+(function(){
+  var boxes=document.querySelectorAll('#todo input'),count=document.getElementById('count'),saved=[];
+  try{saved=JSON.parse(localStorage.getItem('oname-todo')||'[]')}catch(e){}
+  function show(){var n=0;boxes.forEach(function(b){if(b.checked)n++});count.textContent=n===boxes.length?'준비가 끝났습니다.':boxes.length+'개 가운데 '+n+'개 했습니다.'}
+  boxes.forEach(function(b,i){b.checked=!!saved[i];b.addEventListener('change',function(){show();try{localStorage.setItem('oname-todo',JSON.stringify([].map.call(boxes,function(x){return x.checked})))}catch(e){}})});
+  show();
+  var dlg=document.getElementById('zoom'),big=dlg.querySelector('img'),cap=dlg.querySelector('span');
+  document.querySelectorAll('#shots figure button').forEach(function(btn){btn.addEventListener('click',function(){var im=btn.querySelector('img');big.src=im.src;big.alt=im.alt;cap.textContent=btn.parentNode.querySelector('figcaption b').textContent;dlg.showModal()})});
+  dlg.addEventListener('click',function(e){if(e.target===dlg)dlg.close()});
+  document.querySelectorAll('.say button').forEach(function(btn){btn.addEventListener('click',function(){var t=btn.parentNode.querySelector('p').textContent;function ok(){btn.textContent='복사됨';btn.classList.add('done');setTimeout(function(){btn.textContent='복사';btn.classList.remove('done')},1500)}
+    try{navigator.clipboard.writeText(t).then(ok,function(){})}catch(e){}})});
+})();
+</script>
 </body>
 </html>

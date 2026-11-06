@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=d5458408-30e8-49d8-924c-5d77c2d75c7e
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>바이브코딩 학습지 — 코딩 없이, 말로 만드는 법</title>
+<style>
+  :root{
+    --ink:#1E1B4B; --indigo:#4F46E5; --indigo2:#6366F1; --amber:#F59E0B; --amberd:#B45309;
+    --paper:#ffffff; --mist:#F5F6FB; --mist2:#EEF0FB; --line:#E4E6F2;
+    --slate:#3F4664; --mute:#737A99; --green:#059669; --greent:#E7F6F0; --rose:#E11D48; --roset:#FCE9EE;
+    --ice:#C7D2FE; --shadow:0 14px 34px -18px rgba(30,27,75,.35);
+    --rad:18px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Pretendard","Malgun Gothic","Noto Sans KR",sans-serif;
+    background:radial-gradient(1100px 700px at 88% -10%, #EAEbFb 0%, rgba(234,235,251,0) 55%),
+               linear-gradient(180deg,#F7F8FC 0%,#EFF1FB 100%);
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .eyebrow{font-size:12px; font-weight:800; letter-spacing:.16em; color:var(--amberd); text-transform:uppercase; margin:0 0 10px}
+  h1,h2,h3{line-height:1.18; letter-spacing:-.01em; margin:0}
+  p{margin:0 0 14px}
+  a{color:var(--indigo)}
+  button{font-family:inherit}
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:16px;
+    padding:12px 22px; background:rgba(255,255,255,.82); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex; align-items:center; gap:11px; font-weight:800; letter-spacing:-.02em}
+  .brand .dot{width:30px;height:30px;border-radius:9px;background:var(--ink);position:relative;flex:none}
+  .brand .dot::before{content:"〈/〉";position:absolute;inset:0;display:grid;place-items:center;color:var(--amber);font-size:12px;font-weight:700}
+  .brand small{display:block;font-weight:600;color:var(--mute);font-size:11px;letter-spacing:0}
+  .prog-wrap{margin-left:auto; display:flex; align-items:center; gap:12px; min-width:0}
+  .prog-label{font-size:12.5px;font-weight:700;color:var(--slate);white-space:nowrap}
+  .prog-track{width:180px;max-width:34vw;height:9px;border-radius:99px;background:var(--mist2);overflow:hidden;border:1px solid var(--line)}
+  .prog-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--indigo),var(--amber));transition:width .5s cubic-bezier(.2,.7,.2,1)}
+  .menu-btn{display:none;border:1px solid var(--line);background:#fff;border-radius:10px;width:40px;height:38px;font-size:18px;cursor:pointer}
+
+  /* ---------- layout ---------- */
+  .layout{display:grid; grid-template-columns:282px minmax(0,1fr); gap:0; max-width:1240px; margin:0 auto}
+  .rail{
+    position:sticky; top:63px; align-self:start; height:calc(100vh - 63px); overflow:auto;
+    padding:26px 18px 40px; border-right:1px solid var(--line);
+  }
+  .rail h4{font-size:11px;letter-spacing:.16em;color:var(--mute);text-transform:uppercase;margin:0 0 14px 10px}
+  .journey{list-style:none;margin:0;padding:0;position:relative}
+  .journey::before{content:"";position:absolute;left:25px;top:14px;bottom:14px;width:2px;background:var(--line)}
+  .jitem{position:relative;display:flex;gap:12px;align-items:flex-start;padding:7px 8px 7px 0;border-radius:12px;cursor:pointer;border:none;background:none;width:100%;text-align:left;color:var(--slate)}
+  .jitem:hover{background:var(--mist)}
+  .jitem.active{background:#fff;box-shadow:var(--shadow)}
+  .jdot{position:relative;z-index:1;flex:none;width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid var(--line);display:grid;place-items:center;font-weight:800;font-size:13px;color:var(--mute);transition:.25s}
+  .jitem.active .jdot{border-color:var(--indigo);color:var(--indigo);box-shadow:0 0 0 4px #EEF0FB}
+  .jitem.done .jdot{background:var(--green);border-color:var(--green);color:#fff}
+  .jitem.done .jdot::after{content:"✓"}
+  .jitem.done .jdot span{display:none}
+  .jtext{padding-top:5px;min-width:0}
+  .jtext b{display:block;font-size:13.5px;font-weight:700;color:var(--ink);letter-spacing:-.01em}
+  .jtext small{font-size:11.5px;color:var(--mute)}
+  .jitem.active .jtext b{color:var(--indigo)}
+
+  /* ---------- stage / modules ---------- */
+  .stage{padding:34px clamp(20px,4vw,52px) 70px;min-width:0}
+  .module{display:none;animation:rise .45s cubic-bezier(.2,.7,.2,1)}
+  .module.active{display:block}
+  @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .step-tag{font-size:12px;font-weight:800;letter-spacing:.14em;color:var(--indigo);text-transform:uppercase;margin-bottom:9px}
+  .module h2{font-size:clamp(26px,4.4vw,38px);font-weight:800;margin-bottom:8px}
+  .lead{font-size:clamp(15px,2vw,17px);color:var(--slate);max-width:62ch;margin-bottom:24px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:var(--rad);padding:22px 24px;box-shadow:var(--shadow);margin:0 0 18px}
+  .card.flat{box-shadow:none}
+  .card h3{font-size:18px;font-weight:800;margin-bottom:10px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:720px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  /* loop motif */
+  .loop{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:8px 0 4px}
+  .loop .pill{background:#fff;border:1.5px solid var(--indigo);color:var(--ink);font-weight:700;font-size:13.5px;padding:8px 15px;border-radius:99px}
+  .loop .arr{color:var(--amber);font-weight:900;font-size:17px}
+  .loop .rep{color:var(--green);font-weight:800;font-size:13.5px;display:inline-flex;align-items:center;gap:5px}
+
+  /* concept mini cards */
+  .mini{background:var(--mist);border-radius:14px;padding:15px 16px;border:1px solid var(--line)}
+  .mini b{display:block;color:var(--ink);font-weight:800;font-size:15px;margin-bottom:3px}
+  .mini span{color:var(--slate);font-size:13.5px}
+  .icon-chip{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;font-size:19px;color:#fff;margin-bottom:11px}
+
+  /* numbered steps */
+  .steps{list-style:none;margin:0;padding:0;counter-reset:s}
+  .steps li{counter-increment:s;display:flex;gap:13px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .steps li:last-child{border-bottom:none}
+  .steps li::before{content:counter(s);flex:none;width:30px;height:30px;border-radius:50%;background:var(--indigo);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
+  .steps li b{font-weight:700}
+  .steps li.warn::before{background:var(--amber)}
+
+  /* prompt code box */
+  .promptbox{background:var(--ink);color:#fff;border-radius:14px;padding:36px 18px 16px;position:relative;line-height:1.55}
+  .promptbox .tl{position:absolute;top:15px;left:18px;display:flex;gap:6px;margin:0}
+  .promptbox .tl i{width:11px;height:11px;border-radius:50%;display:block}
+  .promptbox pre{margin:0;white-space:pre-wrap;font-family:inherit;font-size:14px;color:#EEF0FB}
+  .copy{position:absolute;top:10px;right:12px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-weight:700;font-size:12px;padding:6px 12px;border-radius:9px;cursor:pointer;transition:.2s}
+  .copy:hover{background:rgba(255,255,255,.2)}
+  .copy.ok{background:var(--green);border-color:var(--green)}
+
+  /* builder */
+  .builder{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:840px){.builder{grid-template-columns:1fr}}
+  .field{margin-bottom:13px}
+  .field label{display:flex;align-items:center;gap:8px;font-weight:800;font-size:13.5px;margin-bottom:6px}
+  .tagchip{font-size:11px;font-weight:800;color:#fff;padding:3px 9px;border-radius:7px}
+  .field textarea{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:10px 12px;font-family:inherit;font-size:14px;resize:vertical;min-height:46px;color:var(--ink);background:#fff}
+  .field textarea:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px #EEF0FB}
+  .presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+  .preset{border:1.5px solid var(--indigo);color:var(--indigo);background:#fff;border-radius:99px;padding:7px 14px;font-weight:700;font-size:12.5px;cursor:pointer;transition:.2s}
+  .preset:hover{background:var(--indigo);color:#fff}
+  .preset.on{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+  .suggs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .sugg{border:1px solid var(--line);background:var(--mist);color:var(--slate);border-radius:99px;padding:5px 11px;font-size:12px;font-weight:600;cursor:pointer;transition:.15s}
+  .sugg::before{content:"+ ";color:var(--indigo2);font-weight:800}
+  .sugg:hover{border-color:var(--indigo2);color:var(--indigo);background:#fff}
+  .scenario-select{width:100%;border:1.5px solid var(--line);border-radius:11px;padding:11px 13px;font-family:inherit;font-size:14.5px;font-weight:600;color:var(--ink);background:#fff;cursor:pointer}
+  .scenario-select:focus{outline:none;border-color:var(--indigo);box-shadow:0 0 0 3px #EEF0FB}
+
+  /* gallery */
+  .gcat{font-size:14px;font-weight:800;color:var(--ink);margin:22px 0 12px;padding-left:2px;letter-spacing:-.01em}
+  .gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+  .gcard{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 17px;box-shadow:var(--shadow)}
+  .gcard b{display:block;font-size:15px;font-weight:800;color:var(--ink)}
+  .gcard span{display:block;font-size:12.5px;color:var(--mute);margin:2px 0 11px}
+  .gallery-grid .promptbox{padding:32px 13px 13px}
+  .gallery-grid .promptbox pre{font-size:12.5px;line-height:1.5}
+  .gallery-grid .copy{top:8px;right:10px;font-size:11px;padding:5px 10px}
+
+  /* rubric table */
+  .rubric{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  .rubric th,.rubric td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  .rubric th{background:var(--mist2);font-weight:800;color:var(--ink)}
+  .rubric td:first-child{font-weight:700;color:var(--ink);background:#FBFBFE;white-space:nowrap}
+  @media(max-width:720px){.rubric{font-size:11.5px} .rubric th,.rubric td{padding:7px 8px}}
+
+  /* quiz */
+  .quiz .opt{display:block;width:100%;text-align:left;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 15px;margin-bottom:9px;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--ink);transition:.18s}
+  .quiz .opt:hover{border-color:var(--indigo2)}
+  .quiz .opt.correct{border-color:var(--green);background:var(--greent);color:#065f46}
+  .quiz .opt.wrong{border-color:var(--rose);background:var(--roset);color:#9f1239}
+  .feedback{margin-top:6px;font-size:13.5px;font-weight:600;padding:11px 14px;border-radius:11px;display:none}
+  .feedback.show{display:block}
+  .feedback.good{background:var(--greent);color:#065f46}
+  .feedback.bad{background:var(--roset);color:#9f1239}
+  .tf{display:flex;gap:10px;margin:6px 0 2px}
+  .tf button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:13px;font-weight:800;font-size:15px;cursor:pointer;color:var(--ink)}
+  .tf button:hover{border-color:var(--indigo2)}
+
+  /* checklist */
+  .check{list-style:none;margin:8px 0 0;padding:0}
+  .check li{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--mist);border:1px solid var(--line);border-radius:12px;margin-bottom:8px;cursor:pointer;font-size:14px;font-weight:600;color:var(--slate);transition:.15s}
+  .check li .box{flex:none;width:23px;height:23px;border-radius:7px;border:2px solid var(--line);background:#fff;display:grid;place-items:center;font-size:14px;color:#fff;transition:.15s}
+  .check li.on{background:var(--greent);border-color:#bfe8d6;color:#065f46}
+  .check li.on .box{background:var(--green);border-color:var(--green)}
+  .check li.on .box::after{content:"✓"}
+
+  /* fix buttons */
+  .fixwrap{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:14px}
+  .fixbtn{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:9px 15px;font-weight:700;font-size:13.5px;cursor:pointer;color:var(--ink);transition:.18s}
+  .fixbtn:hover{border-color:var(--amber)}
+  .fixbtn.active{background:var(--amber);border-color:var(--amber);color:#3a2a05}
+
+  /* callouts */
+  .note{display:flex;gap:13px;align-items:flex-start;border-radius:14px;padding:15px 17px;margin:0 0 18px;font-size:14px}
+  .note .ic{font-size:20px;flex:none;line-height:1.2}
+  .note.amber{background:#FFF7E6;border:1px solid #F4E3BD;color:#5b4708}
+  .note.green{background:var(--greent);border:1px solid #BFE8D6;color:#065f46}
+  .note.rose{background:var(--roset);border:1px solid #F6CBD7;color:#9f1239}
+  .note.ink{background:var(--ink);color:#EEF0FB}
+  .note b{color:inherit}
+
+  /* nav buttons */
+  .navrow{display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap}
+  .btn{border:none;border-radius:12px;padding:13px 22px;font-weight:800;font-size:14.5px;cursor:pointer;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+  .btn.primary{background:var(--amber);color:#3a2a05;box-shadow:0 10px 22px -10px rgba(245,158,11,.7)}
+  .btn.primary:hover{transform:translateY(-1px)}
+  .btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--slate)}
+  .btn.ghost:hover{border-color:var(--indigo2);color:var(--indigo)}
+  .btn.done-state{background:var(--green);color:#fff}
+  .btn:disabled{opacity:.45;cursor:default;transform:none}
+
+  /* hero */
+  .hero{background:linear-gradient(135deg,#1E1B4B 0%,#2C2A6B 60%,#3b2f7a 100%);color:#fff;border-radius:24px;padding:38px clamp(22px,4vw,44px);position:relative;overflow:hidden;margin-bottom:22px}
+  .hero::after{content:"";position:absolute;width:340px;height:340px;border-radius:50%;right:-90px;top:-120px;background:radial-gradient(circle,rgba(245,158,11,.32),rgba(245,158,11,0) 70%)}
+  .hero .eyebrow{color:var(--amber)}
+  .hero h1{font-size:clamp(28px,5.2vw,46px);font-weight:800;color:#fff}
+  .hero h1 .hl{color:var(--amber)}
+  .hero p{color:var(--ice);max-width:54ch;font-size:clamp(15px,2vw,17px);margin-top:14px}
+  .hero .loop .pill{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4);color:#fff}
+
+  .prep{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
+  .openbtn{display:inline-flex;align-items:center;gap:8px;background:#fff;color:var(--ink);font-weight:800;border-radius:12px;padding:12px 18px;text-decoration:none;border:1px solid var(--line)}
+  .openbtn:hover{box-shadow:var(--shadow)}
+
+  /* badge / cert */
+  .cert{display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+  .stamp{flex:none;width:128px;height:128px;border-radius:50%;border:3px dashed var(--line);display:grid;place-items:center;text-align:center;color:var(--mute);font-weight:800;transition:.5s;background:#fff}
+  .stamp.on{border-color:var(--green);color:var(--green);background:var(--greent);transform:rotate(-7deg) scale(1.03)}
+  .stamp span{font-size:13px;display:block}
+  .stamp b{font-size:30px;display:block;letter-spacing:-.02em}
+  .counter{font-weight:800;color:var(--indigo)}
+
+  .footer{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);color:var(--mute);font-size:12.5px}
+
+  /* toast */
+  .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-weight:700;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:80;box-shadow:var(--shadow)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* responsive rail -> top stepper */
+  .scrim{display:none}
+  @media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    .menu-btn{display:block}
+    .rail{position:fixed;top:0;left:0;height:100vh;width:280px;background:#fff;z-index:60;transform:translateX(-105%);transition:.3s;box-shadow:0 0 40px rgba(30,27,75,.25)}
+    .rail.open{transform:none}
+    .scrim.open{display:block;position:fixed;inset:0;background:rgba(30,27,75,.4);z-index:50}
+  }
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="목차 열기">☰</button>
+  <div class="brand"><span class="dot"></span><div>바이브코딩 학습지<small>코딩 없이, 말로 만드는 법</small></div></div>
+  <div class="prog-wrap">
+    <span class="prog-label" id="progLabel">0 / 7 완료</span>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="rail" id="rail" aria-label="학습 단계">
+    <h4>학습 여정</h4>
+    <ul class="journey" id="journey"></ul>
+  </nav>
+
+  <main class="stage" id="stage">
+
+    <!-- ===== WELCOME ===== -->
+    <section class="module active" data-mod="welcome">
+      <div class="hero">
+        <p class="eyebrow">함께 배우는 바이브코딩 · with Claude</p>
+        <h1>코딩을 배우지 않습니다.<br><span class="hl">말하는 법</span>을 배웁니다.</h1>
+        <p>AI(Claude)에게 원하는 것을 평범한 말로 설명하면, 작동하는 도구가 됩니다. 수업은 물론 교무·학급·집안일·일정·가계부까지 — 끝까지 따라오면 누구나 ‘내게 필요한 도구’를 직접 만들 수 있어요.</p>
+        <div class="loop" style="margin-top:18px">
+          <span class="pill">말로 요청</span><span class="arr">→</span>
+          <span class="pill">결과 확인</span><span class="arr">→</span>
+          <span class="pill">수정 요청</span><span class="arr">↺</span>
+          <span class="pill">완성</span>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>🎒 준비물</h3>
+          <p style="margin-bottom:14px">Claude 계정 하나면 됩니다. <b>무료 요금제</b>로 바로 시작할 수 있어요. 노트북이나 데스크톱 브라우저를 권장합니다.</p>
+          <div class="prep">
+            <a class="openbtn" href="https://claude.ai" target="_blank" rel="noopener">claude.ai 새 탭에서 열기 ↗</a>
+          </div>
+        </div>
+        <div class="card">
+          <h3>🧭 이렇게 진행돼요</h3>
+          <p style="margin-bottom:6px">10단계를 차례로 따라가며, 각 단계를 마치면 왼쪽 여정에 표시됩니다. 진도는 자동으로 기억돼요.</p>
+          <p style="margin:0;color:var(--mute);font-size:13.5px">개념 → 마인드셋 → 프롬프트 설계 → 첫 실습 → 반복 → 에러 고치기 → 검증 → 활용 사례 → 내 도구 → 학생 프로젝트</p>
+        </div>
+      </div>
+
+      <div class="navrow">
+        <span></span>
+        <button class="btn primary" data-go="m1">시작하기 →</button>
+      </div>
+    </section>
+
+    <!-- ===== M1 ===== -->
+    <section class="module" data-mod="m1">
+      <p class="step-tag">STEP 01</p>
+      <h2>바이브코딩이란?</h2>
+      <p class="lead">내가 원하는 것을 평범한 ‘말’로 설명하면, AI가 대신 코드를 만들어 주는 방식입니다. 문법을 외울 필요가 없어요.</p>
+
+      <div class="card">
+        <h3>3단계 흐름</h3>
+        <div class="loop">
+          <span class="pill">① 말로 설명</span><span class="arr">→</span>
+          <span class="pill">② AI가 코드 작성</span><span class="arr">→</span>
+          <span class="pill">③ 확인하고 다듬기</span><span class="rep">↺ 반복</span>
+        </div>
+        <p style="margin:14px 0 0;color:var(--slate)">‘이런 걸 만들어줘’라고 요청하면 작동하는 결과가 나오고, 마음에 들 때까지 대화로 고쳐 나갑니다.</p>
+      </div>
+
+      <div class="card">
+        <h3>비유로 이해하기</h3>
+        <div class="grid2">
+          <div class="mini"><b>🍳 요리 — 주문하기</b><span>레시피를 외우는 대신, 셰프에게 ‘이런 요리 주세요’라고 주문합니다.</span></div>
+          <div class="mini"><b>🧭 내비게이션</b><span>길을 다 외우지 않아도, 목적지만 말하면 경로를 안내받습니다.</span></div>
+          <div class="mini"><b>🗣️ 통역사</b><span>내가 한 말을 컴퓨터가 알아듣는 언어로 옮겨 주는 통역사입니다.</span></div>
+          <div class="mini"><b>🏗️ 건축주</b><span>벽돌을 직접 쌓는 대신, 원하는 집의 모습을 설명하는 건축주가 됩니다.</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>무엇을 만들 수 있나요?</h3>
+        <div class="grid2">
+          <div class="mini" style="background:var(--greent);border-color:#BFE8D6"><b style="color:#065f46">✓ 잘 만들어요</b><span>퀴즈·게임·타이머·계산기·차트·일정표처럼 ‘한 화면에서 도는’ 도구</span></div>
+          <div class="mini" style="background:var(--roset);border-color:#F6CBD7"><b style="color:#9f1239">△ 아직 어려워요</b><span>학교 시스템 연결, 로그인·결제, 여러 사람의 자료를 한곳에 모으는 일</span></div>
+        </div>
+        <p style="margin:12px 0 0;color:var(--mute);font-size:13px">작게·구체적으로 시작할수록 성공 확률이 높아요. ‘우리 반 발표자 뽑기’처럼요.</p>
+      </div>
+
+      <div class="card quiz" id="quiz1">
+        <h3>✅ 한 문제로 확인</h3>
+        <p style="margin-bottom:12px">바이브코딩에서 가장 중요한 ‘실력’에 가까운 것은?</p>
+        <div id="quiz1opts"></div>
+        <div class="feedback" id="quiz1fb"></div>
+      </div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="welcome">← 이전</button>
+        <button class="btn primary" data-complete="m1" data-go="m2">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== M2 ===== -->
+    <section class="module" data-mod="m2">
+      <p class="step-tag">STEP 02</p>
+      <h2>마인드셋 — 한 줄이면 끝이 아니다</h2>
+      <p class="lead">바이브코딩의 진짜 모습은 ‘대화와 반복’입니다. 프롬프트 한 줄로 완성되는 게 아니라, 결과를 보고 여러 번 고쳐 나가는 과정이에요.</p>
+
+      <div class="grid2">
+        <div class="card flat" style="background:var(--roset);border-color:#F6CBD7">
+          <h3 style="color:#9f1239">✕ 흔한 오해</h3>
+          <p style="color:#9f1239;margin:0">· 한 줄만 넣으면 완성된다<br>· AI가 알아서 다 해준다<br>· 나온 결과를 그대로 쓰면 끝</p>
+        </div>
+        <div class="card flat" style="background:var(--greent);border-color:#BFE8D6">
+          <h3 style="color:#065f46">✓ 실제 모습</h3>
+          <div class="loop" style="margin-top:4px">
+            <span class="pill" style="border-color:var(--green)">요청</span><span class="arr">→</span>
+            <span class="pill" style="border-color:var(--green)">확인</span><span class="arr">→</span>
+            <span class="pill" style="border-color:var(--green)">수정</span><span class="rep">↺</span>
+          </div>
+          <p style="color:#065f46;margin:12px 0 0">완성은 첫 응답이 아니라, 여러 번의 수정 끝에 나옵니다.</p>
+        </div>
+      </div>
+
+      <div class="card" id="tfcard">
+        <h3>✅ 참 / 거짓</h3>
+        <p style="margin-bottom:6px">“프롬프트 한 줄만 잘 쓰면 바이브코딩은 끝난다.”</p>
+        <div class="tf"><button data-tf="true">참</button><button data-tf="false">거짓</button></div>
+        <div class="feedback" id="tffb"></div>
+      </div>
+
+      <div class="note amber"><span class="ic">💡</span><div><b>핵심 —</b> 문법이 아니라, ‘무엇을 원하는지’ 명확히 말하고 끈기 있게 고치는 능력이 실력입니다.</div></div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m1">← 이전</button>
+        <button class="btn primary" data-complete="m2" data-go="m3">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== M3 builder ===== -->
+    <section class="module" data-mod="m3">
+      <p class="step-tag">STEP 03 · 핵심 도구</p>
+      <h2>프롬프트, 6가지로 ‘설계’하기</h2>
+      <p class="lead">전문가는 한 문장으로 끝내지 않습니다. 6가지를 정해 주면 AI가 멋대로 추측할 일이 줄어, 한 번에 ‘바로 쓸 만한’ 결과가 나와요. 먼저 차이를 보고, 직접 설계해 봅니다.</p>
+
+      <div class="card">
+        <h3>‘한 줄’ vs ‘전문가 프롬프트’</h3>
+        <p style="color:var(--slate);margin-bottom:14px">같은 걸 부탁해도, 어떻게 쓰느냐에 따라 결과가 완전히 달라집니다.</p>
+        <div class="grid2">
+          <div>
+            <div style="font-weight:800;color:var(--rose);font-size:13.5px;margin-bottom:7px">✕ 누구나 쓰는 한 줄</div>
+            <div class="promptbox"><button class="copy" data-copy="p_naive">복사</button><pre id="p_naive">발표자 룰렛 만들어줘</pre></div>
+            <p style="margin:9px 0 0;color:var(--mute);font-size:12.5px">대충은 만들어 주지만 — 명단 수정, 중복 방지, 큰 글씨, 모바일은 빠지기 일쑤라 매번 다시 부탁하게 됩니다.</p>
+          </div>
+          <div>
+            <div style="font-weight:800;color:var(--green);font-size:13.5px;margin-bottom:7px">✓ 전문가 프롬프트 (6요소)</div>
+            <div class="promptbox"><button class="copy" data-copy="p_pro">복사</button><pre id="p_pro">역할: 너는 교실에서 바로 쓸 웹 도구를 만드는 프론트엔드 개발자야. 모르는 부분은 합리적으로 가정하고, 최종 결과를 먼저 보여 줘.
+
+■ 만들 것: 학생 이름 중 무작위로 한 명 뽑는 ‘발표자 룰렛’ 웹페이지
+■ 사용 상황: 28명 학급, 교사가 노트북→TV로, 수업 중 1~2초 안에 한 명
+■ 핵심 기능:
+   - 이름을 줄바꿈으로 입력·수정(기본값 학생1~28)
+   - ‘뽑기’를 누르면 1초 애니메이션 후 당첨자를 화면 중앙에 크게 표시
+   - ‘뽑은 사람 제외’ 토글, ‘초기화’ 버튼
+■ 예외·규칙: 이름이 없거나 모두 뽑혔으면 에러 없이 안내
+■ 디자인·접근성: 아주 큰 글씨·높은 대비·큰 버튼, 모바일 반응형
+■ 출력·제약: 외부 라이브러리 없이 단일 HTML 파일, 인터넷 없이도 작동
+■ 완료 기준: 위 동작이 다 되는지 점검하고, 빠뜨린 가정이 있으면 먼저 물어봐 줘.</pre></div>
+            <p style="margin:9px 0 0;color:var(--mute);font-size:12.5px">동작·예외·디자인·제약·완료 기준까지 정해 주니, 거의 한 번에 완성됩니다. 이게 ‘바이브코딩 실력’이에요.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>직접 설계하기 — 6요소 빌더</h3>
+        <div class="presets">
+          <span style="align-self:center;font-weight:700;font-size:13px;color:var(--mute)">템플릿:</span>
+          <button class="preset" data-preset="quiz">자가채점 퀴즈</button>
+          <button class="preset" data-preset="roulette">발표자 룰렛</button>
+          <button class="preset" data-preset="flash">플래시카드</button>
+          <button class="preset" data-preset="family">가족 주간 일정표</button>
+          <button class="preset" data-preset="clear">비우기</button>
+        </div>
+        <div class="builder">
+          <div>
+            <div class="field"><label><span class="tagchip" style="background:var(--indigo)">맥락</span> 누가 · 언제 · 어디서 쓰나</label><textarea data-f="ctx" placeholder="예: 28명 학급, 교사가 노트북→TV로, 수업 중 1~2초 안에"></textarea>
+              <div class="suggs"><button class="sugg" data-into="ctx">중1 수업·학생 휴대폰</button><button class="sugg" data-into="ctx">28명 학급·TV로</button><button class="sugg" data-into="ctx">학부모 안내용</button><button class="sugg" data-into="ctx">혼자 자습용</button><button class="sugg" data-into="ctx">가족이 태블릿으로</button></div></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--amber)">목표</span> 무엇을 만들지</label><textarea data-f="goal" placeholder="예: 학생 이름 중 무작위로 한 명 뽑는 ‘발표자 룰렛’ 웹페이지"></textarea>
+              <div class="suggs"><button class="sugg" data-into="goal">자가채점 퀴즈</button><button class="sugg" data-into="goal">무작위 뽑기</button><button class="sugg" data-into="goal">타이머·스톱워치</button><button class="sugg" data-into="goal">점수 계산기</button><button class="sugg" data-into="goal">일정표·시간표</button><button class="sugg" data-into="goal">플래시카드</button></div></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--indigo2)">기능</span> 구체적 동작 (여러 줄 또는 / 로 구분)</label><textarea data-f="feat" placeholder="예: 이름 입력·수정 / ‘뽑기’ 누르면 애니메이션 후 크게 표시 / 뽑은 사람 제외"></textarea>
+              <div class="suggs"><button class="sugg" data-into="feat">내용을 내가 입력·수정</button><button class="sugg" data-into="feat">버튼 누르면 즉시 반응</button><button class="sugg" data-into="feat">결과를 크게 표시</button><button class="sugg" data-into="feat">다시하기·초기화</button><button class="sugg" data-into="feat">점수·진행률 표시</button><button class="sugg" data-into="feat">순서 섞기</button></div></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--rose)">예외</span> 비었을 때 · 중복 · 한계 상황</label><textarea data-f="edge" placeholder="예: 모두 뽑히면 에러 없이 안내 / 중복 이름 허용"></textarea>
+              <div class="suggs"><button class="sugg" data-into="edge">비면 에러 없이 안내</button><button class="sugg" data-into="edge">중복 허용</button><button class="sugg" data-into="edge">잘못 입력해도 안 멈춤</button><button class="sugg" data-into="edge">최대 개수 제한</button></div></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--green)">디자인</span> 글씨 · 색 · 모바일 · 접근성</label><textarea data-f="design" placeholder="예: 아주 큰 글씨·큰 버튼, 높은 대비, 모바일 반응형"></textarea>
+              <div class="suggs"><button class="sugg" data-into="design">아주 큰 글씨</button><button class="sugg" data-into="design">높은 대비</button><button class="sugg" data-into="design">큰 버튼</button><button class="sugg" data-into="design">모바일 반응형</button><button class="sugg" data-into="design">정답 초록·오답 빨강</button><button class="sugg" data-into="design">다크 모드</button></div></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--slate)">출력</span> 파일 형태 · 제약</label><textarea data-f="form" placeholder="예: 외부 라이브러리 없이 단일 HTML 파일, 인터넷 없이도 작동"></textarea>
+              <div class="suggs"><button class="sugg" data-into="form">단일 HTML 파일</button><button class="sugg" data-into="form">외부 라이브러리 없이</button><button class="sugg" data-into="form">인터넷 없이 작동</button><button class="sugg" data-into="form">개인정보 저장 안 함</button><button class="sugg" data-into="form">인쇄하기 좋게</button></div></div>
+          </div>
+          <div>
+            <label style="font-weight:800;font-size:13.5px;display:block;margin-bottom:6px">완성된 프롬프트</label>
+            <div class="promptbox">
+              <div class="tl"><i style="background:var(--rose)"></i><i style="background:var(--amber)"></i><i style="background:var(--green)"></i></div>
+              <button class="copy" data-copy="builderOut">복사</button>
+              <pre id="builderOut">왼쪽 빈칸을 채우거나 템플릿을 눌러 보세요. 여기에 ‘전문가 프롬프트’가 완성됩니다.</pre>
+            </div>
+            <p style="margin:12px 0 0;color:var(--mute);font-size:13px">이 프롬프트를 복사해 <b>claude.ai 대화창</b>에 붙여넣으세요. 모든 칸을 다 채울 필요는 없지만, 많이 정할수록 결과가 좋아집니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card flat">
+        <h3>✍️ 기억할 3가지</h3>
+        <div class="grid3">
+          <div class="mini"><b>① 구체적으로</b><span>‘퀴즈 만들어줘’보다 동작·숫자·상황까지 콕 집어 주세요.</span></div>
+          <div class="mini"><b>② 예시·기준을 주기</b><span>원하는 모양과 ‘완료 기준’을 알려 주면 추측이 줄어요.</span></div>
+          <div class="mini"><b>③ 한 번에 하나씩</b><span>한꺼번에 다 말하기보다, 만들고 본 뒤 하나씩 고치세요.</span></div>
+        </div>
+      </div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m2">← 이전</button>
+        <button class="btn primary" data-complete="m3" data-go="m4">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== M4 first hands-on ===== -->
+    <section class="module" data-mod="m4">
+      <p class="step-tag">STEP 04 · 실습 ①</p>
+      <h2>첫 작품: 발표자 룰렛</h2>
+      <p class="lead">claude.ai에 접속해, 아래 순서대로 직접 만들어 봅니다. 오른쪽 ‘Artifact’ 패널에서 결과가 바로 작동해요.</p>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>따라 하기 6단계</h3>
+          <ol class="steps">
+            <li><b>claude.ai 접속</b> → 새 대화 시작</li>
+            <li>아래 프롬프트를 <b>그대로 붙여넣기</b></li>
+            <li>오른쪽 <b>Artifact 패널</b>에서 직접 작동 확인</li>
+            <li class="warn">채팅으로 <b>2~3회 수정</b> (반복이 핵심)</li>
+            <li>우리 반 내용으로 교체 — <b>실명 대신 번호·별명</b></li>
+            <li><b>‘Publish’</b>로 링크 만들어 공유</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>붙여넣을 첫 프롬프트</h3>
+          <div class="promptbox">
+            <div class="tl"><i style="background:var(--rose)"></i><i style="background:var(--amber)"></i><i style="background:var(--green)"></i></div>
+            <button class="copy" data-copy="p_roulette">복사</button>
+            <pre id="p_roulette">이름을 입력하면 무작위로 한 명을 뽑아 주는 ‘발표자 룰렛’을 만들어줘. 버튼을 누르면 원판이 돌아가고, 당첨자 이름이 화면 중앙에 크게 표시되는 웹페이지로.</pre>
+          </div>
+          <p style="margin:14px 0 6px;font-weight:700;font-size:13.5px">이어서 — 수정 요청 예시</p>
+          <div class="promptbox" style="margin-bottom:10px">
+            <button class="copy" data-copy="p_fu1">복사</button>
+            <pre id="p_fu1">뽑힌 사람은 다시 안 뽑히게 해줘.</pre>
+          </div>
+          <div class="promptbox">
+            <button class="copy" data-copy="p_fu2">복사</button>
+            <pre id="p_fu2">글씨를 더 크게, 모바일에서도 잘 보이게 해줘.</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="note amber"><span class="ic">🛠️</span><div><b>막히면?</b> 빨간 에러가 떠도 당황 금지 — 메시지를 그대로 복사해 ‘이 오류 고쳐줘’라고 붙여넣으면 Claude가 직접 고쳐 줍니다.</div></div>
+
+      <div class="card">
+        <h3>직접 해보기</h3>
+        <ul class="check" data-check="m4check">
+          <li><span class="box"></span>claude.ai에 접속해 새 대화를 열었다</li>
+          <li><span class="box"></span>예시 프롬프트를 붙여넣었다</li>
+          <li><span class="box"></span>오른쪽 Artifact에서 직접 작동해 봤다</li>
+          <li><span class="box"></span>수정 요청을 한 번 이상 해봤다</li>
+          <li><span class="box"></span>내 반 내용으로 바꿔봤다</li>
+        </ul>
+      </div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m3">← 이전</button>
+        <button class="btn primary" data-complete="m4" data-go="m5">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== M5 iterate ===== -->
+    <section class="module" data-mod="m5">
+      <p class="step-tag">STEP 05</p>
+      <h2>반복·수정의 기술</h2>
+      <p class="lead">한 번에 완벽하지 않아도 괜찮아요. 아쉬운 점을 골라 보세요. 바로 쓸 수 있는 ‘수정 요청’ 프롬프트를 만들어 드립니다.</p>
+
+      <div class="card">
+        <h3>무엇이 아쉬운가요?</h3>
+        <div class="fixwrap" id="fixwrap">
+          <button class="fixbtn" data-fix="small">글씨가 작아요</button>
+          <button class="fixbtn" data-fix="color">색을 바꾸고 싶어요</button>
+          <button class="fixbtn" data-fix="feature">기능을 더하고 싶어요</button>
+          <button class="fixbtn" data-fix="mobile">모바일에서 깨져요</button>
+          <button class="fixbtn" data-fix="slow">실행이 느려요</button>
+        </div>
+        <div class="promptbox">
+          <button class="copy" data-copy="fixOut">복사</button>
+          <pre id="fixOut">위에서 아쉬운 점을 하나 골라 보세요.</pre>
+        </div>
+        <p style="margin:12px 0 0;color:var(--mute);font-size:13px">팁: 한 번에 하나씩 고치면 결과를 확인하기 쉬워요. 고치고 → 보고 → 또 고치고를 반복하세요.</p>
+      </div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m4">← 이전</button>
+        <button class="btn primary" data-complete="m5" data-go="debug">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== DEBUG (new) ===== -->
+    <section class="module" data-mod="debug">
+      <p class="step-tag">STEP 06</p>
+      <h2>에러가 나면, 대화로 고치기</h2>
+      <p class="lead">빨간 글씨가 떠도 고장이 아니에요. AI가 만든 건 AI가 고칩니다. 핵심은 ‘무엇이 잘못됐는지’를 잘 전달하는 거예요 — 추측하지 말고 ‘증거’를 주세요.</p>
+
+      <div class="card">
+        <h3>고치는 3단계</h3>
+        <ol class="steps">
+          <li><b>한 가지만 정한다</b> — ‘버튼이 안 눌린다’처럼 증상을 하나로 좁히기</li>
+          <li><b>증거를 그대로 준다</b> — 빨간 에러 메시지를 복사하거나, 화면 스크린샷을 첨부</li>
+          <li class="warn"><b>증상으로 요청한다</b> — ‘이렇게 고쳐’가 아니라 ‘이런 증상인데 원인을 찾아 고쳐줘’</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>그대로 복사해 쓰는 디버깅 프롬프트</h3>
+        <p style="margin:0 0 8px;font-weight:700;font-size:13px;color:var(--mute)">① 빨간 에러가 떴을 때</p>
+        <div class="promptbox" style="margin-bottom:12px"><button class="copy" data-copy="d_err">복사</button><pre id="d_err">방금 화면에 이런 빨간 오류가 떴어:
+[여기에 에러 메시지를 그대로 붙여넣기]
+어느 부분이 왜 문제인지 한 줄로 설명하고, 고쳐서 다시 만들어줘.</pre></div>
+        <p style="margin:0 0 8px;font-weight:700;font-size:13px;color:var(--mute)">② 에러는 없는데 동작이 이상할 때</p>
+        <div class="promptbox" style="margin-bottom:12px"><button class="copy" data-copy="d_sym">복사</button><pre id="d_sym">에러는 안 뜨는데, [증상: 예 - ‘뽑기’ 버튼을 눌러도 아무 일이 없어].
+원인을 찾아서 고쳐줘. 바꾼 부분도 한 줄로 알려줘.</pre></div>
+        <p style="margin:0 0 8px;font-weight:700;font-size:13px;color:var(--mute)">③ 화면 모양이 의도와 다를 때 (스크린샷 첨부)</p>
+        <div class="promptbox"><button class="copy" data-copy="d_shot">복사</button><pre id="d_shot">이 화면 스크린샷을 첨부했어. 빨간 동그라미 친 부분이 의도와 달라.
+이렇게 보여야 해: [원하는 모습].
+그대로 고쳐서 다시 만들어줘.</pre></div>
+      </div>
+
+      <div class="note amber"><span class="ic">🧭</span><div><b>자주 겪는 상황 —</b> 한 번에 하나씩 고치기 / 고치다 더 나빠지면 ‘방금 변경은 되돌리고 원래대로’ / 같은 오류가 계속 반복되면 ‘처음부터 더 단순하게 다시 만들어줘’.</div></div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m5">← 이전</button>
+        <button class="btn primary" data-complete="debug" data-go="m6">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== M6 verify & safety ===== -->
+    <section class="module" data-mod="m6">
+      <p class="step-tag">STEP 07</p>
+      <h2>검증과 안전</h2>
+      <p class="lead">AI는 빠르지만 늘 옳지는 않습니다. ‘작동한다’와 ‘제대로 된다’는 다릅니다. 강하게 활용하되, 반드시 검증하세요.</p>
+
+      <div class="note ink"><span class="ic">🎓</span><div><b>비유 — AI는 ‘똑똑한 실습생’.</b> 유능하지만 경험은 적은 실습생처럼, 일은 빠르되 결과는 반드시 검토가 필요합니다.</div></div>
+
+      <div class="card">
+        <h3>검증 체크리스트</h3>
+        <ul class="check" data-check="m6check">
+          <li><span class="box"></span>직접 실행해 결과를 끝까지 확인했다</li>
+          <li><span class="box"></span>학생 입장에서 오류·예외 상황을 점검했다</li>
+          <li><span class="box"></span>개인정보·민감정보는 넣지 않았다</li>
+          <li><span class="box"></span>‘작동한다’와 ‘제대로 된다’를 구분했다</li>
+        </ul>
+      </div>
+
+      <div class="grid2">
+        <div class="note rose" style="margin:0"><span class="ic">🔒</span><div><b>개인정보 · 공개 주의</b><br>‘Publish’로 공개한 링크는 검색에 노출될 수 있어요. 학생 이름·정보가 든 결과물은 공개하지 말고, 내부 공유는 다운로드나 Remix를 쓰세요.</div></div>
+        <div class="note amber" style="margin:0"><span class="ic">📰</span><div><b>2026년에 실제로</b><br>검토 없이 공개한 앱에서 대규모 정보 유출 사고가 잇따랐습니다(몰트북·Lovable 등). 검증은 선택이 아니라 필수예요.</div></div>
+      </div>
+
+      <div class="note amber"><span class="ic">💾</span><div><b>저장에 주의 —</b> 만든 도구는 새로고침하면 입력한 내용이 사라질 수 있어요. 중요한 자료는 따로 보관하거나, ‘입력한 내용이 저장되게 해줘’라고 이어서 요청하세요.</div></div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="debug">← 이전</button>
+        <button class="btn primary" data-complete="m6" data-go="gallery">이 단계 완료 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== GALLERY (work + life scenarios) ===== -->
+    <section class="module" data-mod="gallery">
+      <p class="step-tag">STEP 08 · 둘러보기</p>
+      <h2>활용 사례 — 수업부터 일상까지</h2>
+      <p class="lead">바이브코딩은 수업 자료만이 아니라 교무·학급·일정·집안일·가계까지 도와줍니다. 마음에 드는 프롬프트를 복사해 claude.ai에 붙여넣어 보세요. 숫자·이름은 내 상황에 맞게 바꾸면 됩니다.</p>
+
+      <h3 class="gcat">🗂️ 교무·행정</h3>
+      <div class="gallery-grid">
+        <div class="gcard"><b>가정통신문 초안</b><span>정중한 말투로 빠르게</span>
+          <div class="promptbox"><button class="copy" data-copy="g1">복사</button><pre id="g1">다음 주 현장학습 안내 가정통신문 초안을 만들어줘. 날짜·장소·준비물·회신 기한을 넣고, 학부모님께 보내는 정중한 말투로.</pre></div></div>
+        <div class="gcard"><b>수행평가 점수 계산기</b><span>가중치 합산·등급 자동</span>
+          <div class="promptbox"><button class="copy" data-copy="g2">복사</button><pre id="g2">수행평가 4개 항목 점수를 입력하면 가중치(30·30·20·20%)로 합산해 환산 점수와 등급을 보여주는 계산기를 만들어줘. 등급 기준은 내가 바꿀 수 있게. 웹페이지로.</pre></div></div>
+        <div class="gcard"><b>상담 신청 화면</b><span>희망 시간 받아 목록화</span>
+          <div class="promptbox"><button class="copy" data-copy="g3">복사</button><pre id="g3">학부모 상담 희망 시간을 고르는 간단한 신청 화면을 만들어줘. 요일·시간대를 선택하면 아래 목록에 쌓이게. 웹페이지로.</pre></div></div>
+      </div>
+
+      <h3 class="gcat">🏫 학급경영</h3>
+      <div class="gallery-grid">
+        <div class="gcard"><b>자리 배치 뽑기</b><span>무작위 + 다시 섞기</span>
+          <div class="promptbox"><button class="copy" data-copy="g4">복사</button><pre id="g4">우리 반 28명 자리를 무작위로 배치해 주는 도구를 만들어줘. 다시 누르면 새로 섞이고, 이름 목록은 내가 바꿀 수 있게. 웹페이지로.</pre></div></div>
+        <div class="gcard"><b>1인 1역 배정</b><span>역할을 공평하게</span>
+          <div class="promptbox"><button class="copy" data-copy="g5">복사</button><pre id="g5">학급 역할 12개를 학생들에게 무작위로 배정하는 도구를 만들어줘. 이름과 역할 목록은 내가 바꿀 수 있게. 웹페이지로.</pre></div></div>
+        <div class="gcard"><b>칭찬 점수판</b><span>모둠 점수 + 그래프</span>
+          <div class="promptbox"><button class="copy" data-copy="g6">복사</button><pre id="g6">모둠별 칭찬 점수를 +1 버튼으로 올리고 막대그래프로 보여주는 화면을 만들어줘. 모둠 수와 이름은 내가 정할 수 있게. 웹페이지로.</pre></div></div>
+      </div>
+
+      <h3 class="gcat">🗓️ 개인 일정·생산성</h3>
+      <div class="gallery-grid">
+        <div class="gcard"><b>주간 할 일 보드</b><span>체크하면 줄이 쫙</span>
+          <div class="promptbox"><button class="copy" data-copy="g7">복사</button><pre id="g7">이번 주 할 일을 요일별로 적고, 체크하면 줄이 그어지는 투두 보드를 만들어줘. 완료한 개수도 보여주게. 웹페이지로.</pre></div></div>
+        <div class="gcard"><b>내 시간표</b><span>오늘 요일 강조</span>
+          <div class="promptbox"><button class="copy" data-copy="g8">복사</button><pre id="g8">내 주간 수업 시간표를 표로 만들어줘. 요일×교시 칸에 과목과 교실을 넣고, 빈 시간은 회색, 오늘 요일은 강조해서. 웹페이지로.</pre></div></div>
+      </div>
+
+      <h3 class="gcat">👨‍👩‍👧‍👦 가족·자녀</h3>
+      <div class="gallery-grid">
+        <div class="gcard"><b>가족 주간 스케줄</b><span>사람별 색 구분</span>
+          <div class="promptbox"><button class="copy" data-copy="g9">복사</button><pre id="g9">우리 가족(엄마·아빠·아이 둘) 주간 일정을 한눈에 보는 표를 만들어줘. 사람별 색을 다르게 하고, 오늘 칸을 강조. 모바일에서도 잘 보이게.</pre></div></div>
+        <div class="gcard"><b>아이 학원 관리</b><span>오늘 갈 학원·픽업 시간</span>
+          <div class="promptbox"><button class="copy" data-copy="g10">복사</button><pre id="g10">아이 학원 시간표(요일·시간·과목·장소)를 보여주고, 오늘 갈 학원을 알려 주는 화면을 만들어줘. 픽업 시간도 표시하고, 목록은 내가 바꿀 수 있게. 휴대폰에서 보기 좋게.</pre></div></div>
+      </div>
+
+      <h3 class="gcat">💰 생활·금전</h3>
+      <div class="gallery-grid">
+        <div class="gcard"><b>식사·운동 기록 다이어리</b><span>한 주를 돌아보기</span>
+          <div class="promptbox"><button class="copy" data-copy="g11">복사</button><pre id="g11">매일 먹은 것과 운동을 적고, 한 주를 그래프로 돌아보는 기록 다이어리를 만들어줘. 점수나 목표 없이 기록·돌아보기 용도로. 웹페이지로.</pre></div></div>
+        <div class="gcard"><b>한 달 가계부</b><span>지출 합계·남은 예산</span>
+          <div class="promptbox"><button class="copy" data-copy="g12">복사</button><pre id="g12">이번 달 지출을 카테고리별(식비·교통·여가 등)로 입력하면 합계와 남은 예산, 비율 그래프를 보여주는 가계부를 만들어줘. 카테고리는 내가 바꿀 수 있게. 웹페이지로.</pre></div></div>
+        <div class="gcard"><b>월급 분배 계산기</b><span>저축·지출 비율 자동</span>
+          <div class="promptbox"><button class="copy" data-copy="g13">복사</button><pre id="g13">월급을 입력하면 저축·고정지출·생활비를 정해 둔 비율(예: 50·30·20%)로 자동으로 나눠 보여주는 계산기를 만들어줘. 비율은 내가 바꿀 수 있게. 웹페이지로.</pre></div></div>
+      </div>
+
+      <div class="note green"><span class="ic">✨</span><div>전부 ‘말’로 만든 것들이에요. 한 가지 골라 지금 바로 만들어 보고, 다음 단계에서 <b>내 상황에 꼭 맞는 도구</b>를 직접 설계해 봅니다.</div></div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m6">← 이전</button>
+        <button class="btn primary" data-complete="gallery" data-go="m7">둘러봤어요 → 다음</button>
+      </div>
+    </section>
+
+    <!-- ===== M7 my subject tool ===== -->
+    <section class="module" data-mod="m7">
+      <p class="step-tag">STEP 09 · 졸업 과제</p>
+      <h2>내 도구 만들기 — 수업부터 일상까지</h2>
+      <p class="lead">이제 직접 차례입니다. 상황을 하나 고르면 4요소가 채워져요. 내 상황에 맞게 고친 뒤 ‘나만의 프롬프트’를 완성하고, Claude로 만들어 보세요.</p>
+
+      <div class="card">
+        <div style="margin-bottom:14px">
+          <label for="scenarioSelect" style="font-weight:800;font-size:13.5px;display:block;margin-bottom:7px">상황 고르기</label>
+          <select id="scenarioSelect" class="scenario-select">
+            <option value="">— 직접 입력하거나, 상황을 골라 채우기 —</option>
+            <optgroup label="수업">
+              <option value="수업-퀴즈">단어/개념 자가채점 퀴즈</option>
+              <option value="수업-룰렛">발표자 룰렛</option>
+            </optgroup>
+            <optgroup label="교무·행정">
+              <option value="교무-통신문">가정통신문 초안</option>
+              <option value="교무-점수">수행평가 점수 계산기</option>
+            </optgroup>
+            <optgroup label="학급경영">
+              <option value="학급-자리">자리 배치 뽑기</option>
+              <option value="학급-역할">1인 1역 배정</option>
+            </optgroup>
+            <optgroup label="개인 일정">
+              <option value="개인-투두">주간 할 일 보드</option>
+              <option value="개인-시간표">내 시간표</option>
+            </optgroup>
+            <optgroup label="가족·자녀">
+              <option value="가족-스케줄">가족 주간 스케줄</option>
+              <option value="가족-학원">아이 학원 관리</option>
+            </optgroup>
+            <optgroup label="생활·금전">
+              <option value="생활-다이어리">식사·운동 기록 다이어리</option>
+              <option value="생활-가계부">한 달 가계부</option>
+              <option value="생활-월급">월급 분배 계산기</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="builder">
+          <div>
+            <div class="field"><label><span class="tagchip" style="background:var(--indigo)">맥락</span> 누가 · 언제 · 어디서</label><textarea data-sf="ctx" placeholder="예: 중2 사회, 학생이 휴대폰으로, 단원 복습 시간"></textarea></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--amber)">목표</span> 무엇을 만들지</label><textarea data-sf="goal" placeholder="예: 사건을 연도 순서대로 맞추는 활동 웹페이지"></textarea></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--indigo2)">기능</span> 구체적 동작 (여러 줄 또는 / 로)</label><textarea data-sf="feat" placeholder="예: 8문항 / 드래그로 순서 맞추기 / 정답 확인 / 끝에 점수"></textarea></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--rose)">예외</span> 비었을 때 · 한계 상황</label><textarea data-sf="edge" placeholder="예: 다 맞히면 축하 화면, 틀리면 다시 시도"></textarea></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--green)">디자인</span> 글씨 · 색 · 모바일</label><textarea data-sf="design" placeholder="예: 큰 글씨, 모바일에서도 잘 보이게"></textarea></div>
+            <div class="field"><label><span class="tagchip" style="background:var(--slate)">출력</span> 파일 형태 · 제약</label><textarea data-sf="form" placeholder="예: 외부 라이브러리 없이 단일 HTML 파일"></textarea></div>
+          </div>
+          <div>
+            <label style="font-weight:800;font-size:13.5px;display:block;margin-bottom:6px">내 프롬프트</label>
+            <div class="promptbox">
+              <div class="tl"><i style="background:var(--rose)"></i><i style="background:var(--amber)"></i><i style="background:var(--green)"></i></div>
+              <button class="copy" data-copy="subjOut">복사</button>
+              <pre id="subjOut">과목을 고르고 빈칸을 채워 보세요.</pre>
+            </div>
+            <ul class="check" data-check="m7check" style="margin-top:14px">
+              <li><span class="box"></span>내 교과용 프롬프트를 완성했다</li>
+              <li><span class="box"></span>Claude로 만들어 작동을 확인했다</li>
+              <li><span class="box"></span>검증 체크리스트로 점검했다</li>
+              <li><span class="box"></span>공유(Publish/링크) 준비를 마쳤다</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="note green"><span class="ic">📋</span><div><b>내 자료 넣기 —</b> 단어 목록·문항 같은 내 자료는 프롬프트에 바로 붙여넣거나, 만든 뒤 ‘여기에 이 목록을 넣어줘’라고 이어서 요청하세요. 학생은 실명 대신 번호·별명으로.</div></div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="gallery">← 이전</button>
+        <button class="btn primary" data-complete="m7" data-go="project">완성! 다음 →</button>
+      </div>
+    </section>
+
+    <!-- ===== PROJECT (new) ===== -->
+    <section class="module" data-mod="project">
+      <p class="step-tag">STEP 10 · 확장</p>
+      <h2>학생이 직접 만들게 하기</h2>
+      <p class="lead">가장 강력한 활용은 교사가 아니라 학생이 ‘만드는 사람’이 되는 거예요. 한 차시 흐름과 평가 루브릭을 그대로 가져다 쓰세요.</p>
+
+      <div class="card">
+        <h3>한 차시 수업 흐름 (예: 45분)</h3>
+        <ol class="steps">
+          <li><b>문제 찾기 (5분)</b> — ‘우리 반·내 생활에서 불편한 것’을 한 가지 정하기</li>
+          <li><b>설계 (10분)</b> — 6요소(맥락·목표·기능·예외·디자인·출력)로 프롬프트 쓰기</li>
+          <li><b>제작 (15분)</b> — Claude로 만들고 오른쪽 Artifact에서 작동 확인</li>
+          <li class="warn"><b>개선 (10분)</b> — 검증 체크 + 결과를 보며 2~3회 수정(반복)</li>
+          <li><b>공유 (5분)</b> — 짝과 시연하고 한 가지씩 피드백 주고받기</li>
+        </ol>
+      </div>
+
+      <div class="card">
+        <h3>평가 루브릭</h3>
+        <table class="rubric">
+          <thead><tr><th>평가 요소</th><th>상</th><th>중</th><th>하</th></tr></thead>
+          <tbody>
+            <tr><td>문제 정의</td><td>구체적이고 실제 필요에서 출발</td><td>주제는 있으나 다소 모호</td><td>문제가 불명확</td></tr>
+            <tr><td>프롬프트 설계</td><td>목표·기능·제약을 구조적으로 작성</td><td>일부 요소만 포함</td><td>한 줄 요청에 그침</td></tr>
+            <tr><td>반복·개선</td><td>결과를 검토해 의미 있게 여러 번 수정</td><td>한두 번 수정</td><td>거의 수정 안 함</td></tr>
+            <tr><td>검증·책임</td><td>오류·예외·개인정보까지 점검</td><td>작동 여부만 확인</td><td>확인하지 않음</td></tr>
+            <tr><td>공유·설명</td><td>무엇을 왜 만들었는지 설명</td><td>결과만 보여줌</td><td>공유하지 않음</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note green"><span class="ic">🧑‍🏫</span><div><b>운영 팁 —</b> 모둠 2~3명에 기기 1대 / 학생은 실명 대신 번호·별명 / ‘결과만 복사·제출’을 막기 위해 <b>프롬프트와 수정 과정</b>도 함께 제출하게 하세요. 과정이 곧 평가입니다.</div></div>
+
+      <div class="navrow">
+        <button class="btn ghost" data-go="m7">← 이전</button>
+        <button class="btn primary" data-complete="project" data-go="done">수료로 →</button>
+      </div>
+    </section>
+
+    <!-- ===== DONE ===== -->
+    <section class="module" data-mod="done">
+      <p class="step-tag">수료 & 공유</p>
+      <h2>여기까지 온 당신, 이제 ‘만드는 사람’</h2>
+      <p class="lead">학습 현황을 확인하고, 동료와 함께 학습할 수 있도록 이 학습지를 공유해 보세요.</p>
+
+      <div class="card">
+        <div class="cert">
+          <div class="stamp" id="stamp"><div><b id="stampNum">0/7</b><span>완료</span></div></div>
+          <div style="min-width:200px;flex:1">
+            <h3 id="certTitle">아직 진행 중이에요</h3>
+            <p id="certMsg" style="margin:0;color:var(--slate)">7단계를 모두 마치면 수료가 표시됩니다. 왼쪽 여정에서 남은 단계를 이어가 보세요.</p>
+            <p style="margin:12px 0 0" class="counter" id="sharedLine" hidden></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>🔗 이 학습지 공유하기</h3>
+          <p style="margin-bottom:8px">동료가 계정 없이도 함께 학습할 수 있게 공유하세요.</p>
+          <ol class="steps" style="counter-reset:s">
+            <li>화면 하단의 <b>‘Publish’</b> 버튼 누르기</li>
+            <li>만들어진 공개 링크 복사하기</li>
+            <li>동료에게 링크 보내기 (계정 없이 열람)</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>🚀 다음 한 걸음</h3>
+          <p style="margin:0 0 8px">· 오늘 만든 도구를 <b>이번 주 수업</b>에 한 번 써보기</p>
+          <p style="margin:0 0 8px">· 교과·학년 모임에서 <b>공유하고 함께 개선</b>하기</p>
+          <p style="margin:0">· 학생이 직접 만드는 <b>프로젝트</b>로 확장하기</p>
+        </div>
+      </div>
+
+      <div class="navrow">
+        <button class="btn ghost" id="resetBtn">진도 초기화</button>
+        <button class="btn primary" data-go="welcome">처음으로</button>
+      </div>
+
+      <div class="footer">교사를 위한 바이브코딩 연수 · 학습지 — 함께 만들고, 함께 나눠요.</div>
+    </section>
+
+  </main>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  "use strict";
+  // ---------- module map ----------
+  var ORDER = ["welcome","m1","m2","m3","m4","m5","debug","m6","gallery","m7","project","done"];
+  var TRACK = ["m1","m2","m3","m4","m5","debug","m6","gallery","m7","project"]; // counted toward progress
+  var TITLES = {welcome:["시작","바이브코딩이란?"],m1:["1","바이브코딩이란?"],m2:["2","마인드셋"],m3:["3","프롬프트 설계"],m4:["4","첫 실습: 룰렛"],m5:["5","반복·수정"],debug:["6","에러 고치기"],m6:["7","검증·안전"],gallery:["8","활용 사례"],m7:["9","내 도구 만들기"],project:["10","학생 프로젝트"],done:["수료","수료 & 공유"]};
+
+  var state = { current:"welcome", done:{}, checks:{}, counted:false };
+
+  // ---------- storage (graceful: works in Claude; no-op elsewhere) ----------
+  var KEY="vibe-jaki-progress";
+  function hasStore(){ return (typeof window!=="undefined") && window.storage && typeof window.storage.get==="function"; }
+  function save(){
+    if(!hasStore()) return;
+    try{ window.storage.set(KEY, JSON.stringify({done:state.done,checks:state.checks,counted:state.counted}), false); }catch(e){}
+  }
+  function load(cb){
+    if(!hasStore()){ cb(); return; }
+    try{
+      window.storage.get(KEY,false).then(function(r){
+        if(r&&r.value){ try{ var d=JSON.parse(r.value); state.done=d.done||{}; state.checks=d.checks||{}; state.counted=!!d.counted; }catch(e){} }
+        cb();
+      }).catch(function(){ cb(); });
+    }catch(e){ cb(); }
+  }
+  function bumpShared(){
+    if(!hasStore()) return;
+    try{
+      window.storage.get("vibe-jaki-completions",true).then(function(r){
+        var n = (r&&r.value)? (parseInt(r.value,10)||0) : 0;
+        n+=1;
+        window.storage.set("vibe-jaki-completions", String(n), true).then(showShared).catch(function(){});
+      }).catch(function(){});
+    }catch(e){}
+  }
+  function showShared(){
+    if(!hasStore()) return;
+    try{
+      window.storage.get("vibe-jaki-completions",true).then(function(r){
+        var n=(r&&r.value)?(parseInt(r.value,10)||0):0;
+        var el=document.getElementById("sharedLine");
+        if(el && n>0){ el.hidden=false; el.textContent="🎉 지금까지 "+n+"명이 이 학습지를 수료했어요."; }
+      }).catch(function(){});
+    }catch(e){}
+  }
+
+  // ---------- helpers ----------
+  function $(s,r){ return (r||document).querySelector(s); }
+  function $all(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); }
+  function toast(msg){ var t=$("#toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(function(){t.classList.remove("show");},1600); }
+
+  function copyText(txt){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt).then(function(){toast("복사했어요");}).catch(fallback);
+    } else { fallback(); }
+    function fallback(){
+      try{ var ta=document.createElement("textarea"); ta.value=txt; ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); document.body.removeChild(ta); toast("복사했어요"); }
+      catch(e){ toast("복사가 안 돼요 — 직접 선택해 주세요"); }
+    }
+  }
+
+  // ---------- build journey rail ----------
+  function buildRail(){
+    var ul=$("#journey"); ul.innerHTML="";
+    ORDER.forEach(function(id){
+      var t=TITLES[id];
+      var li=document.createElement("button");
+      li.className="jitem"; li.setAttribute("data-nav",id);
+      var num = (TRACK.indexOf(id)>=0)? t[0] : (id==="welcome"?"·":"★");
+      var sub = id==="welcome"?"여기서 출발":(id==="done"?"공유하기":"STEP "+t[0]);
+      li.innerHTML='<span class="jdot"><span>'+num+'</span></span><span class="jtext"><b>'+t[1]+'</b><small>'+sub+'</small></span>';
+      li.addEventListener("click",function(){ go(id); closeRail(); });
+      ul.appendChild(li);
+    });
+  }
+
+  // ---------- navigation ----------
+  function go(id){
+    state.current=id;
+    $all(".module").forEach(function(m){ m.classList.toggle("active", m.getAttribute("data-mod")===id); });
+    try{ var st=$("#stage"); if(st && st.scrollIntoView) st.scrollIntoView({block:"start"}); if(window.scrollTo) window.scrollTo(0,0); }catch(e){}
+    render();
+  }
+
+  function complete(id){
+    state.done[id]=true; save(); render();
+    if(allDone() && !state.counted){ state.counted=true; save(); bumpShared(); }
+  }
+  function allDone(){ return TRACK.every(function(id){ return state.done[id]; }); }
+  function doneCount(){ return TRACK.filter(function(id){ return state.done[id]; }).length; }
+
+  // ---------- render dynamic bits ----------
+  function render(){
+    // rail states
+    $all(".jitem").forEach(function(li){
+      var id=li.getAttribute("data-nav");
+      li.classList.toggle("active", id===state.current);
+      li.classList.toggle("done", !!state.done[id]);
+    });
+    // progress
+    var c=doneCount(), pct=Math.round(c/TRACK.length*100);
+    $("#progFill").style.width=pct+"%";
+    $("#progLabel").textContent=c+" / "+TRACK.length+" 완료";
+    // complete buttons label
+    $all("[data-complete]").forEach(function(b){
+      var id=b.getAttribute("data-complete");
+      if(state.done[id]){ b.classList.add("done-state"); }
+      else { b.classList.remove("done-state"); }
+    });
+    // checklists
+    $all("[data-check]").forEach(function(ul){
+      var key=ul.getAttribute("data-check"); var saved=state.checks[key]||{};
+      $all("li",ul).forEach(function(li,i){ li.classList.toggle("on", !!saved[i]); });
+    });
+    // cert
+    var stamp=$("#stamp"), num=$("#stampNum"), title=$("#certTitle"), msg=$("#certMsg");
+    if(stamp){
+      num.textContent=c+"/"+TRACK.length;
+      if(allDone()){
+        stamp.classList.add("on"); num.textContent="수료"; 
+        title.textContent="🎓 수료를 축하합니다!";
+        msg.textContent="이제 무엇이든 ‘말로’ 만들 수 있어요. 오늘 만든 도구를 수업에 써보고, 동료와 나눠 보세요.";
+      } else {
+        stamp.classList.remove("on");
+        title.textContent="아직 진행 중이에요 ("+c+"/"+TRACK.length+")";
+        msg.textContent="7단계를 모두 마치면 수료가 표시됩니다. 왼쪽 여정에서 남은 단계를 이어가 보세요.";
+      }
+    }
+  }
+
+  // ---------- prompt builder ----------
+  function bullets(s){ return (s||"").split(/\n|\s\/\s/).map(function(x){return x.trim();}).filter(Boolean).map(function(x){return "   - "+x;}).join("\n"); }
+  function assemble(f){
+    var keys=["ctx","goal","feat","edge","design","form"];
+    var any=keys.some(function(k){ return (f[k]||"").trim(); });
+    if(!any) return null;
+    var L=[];
+    L.push("역할: 너는 교실에서 바로 쓸 웹 도구를 만드는 프론트엔드 개발자야. 모르는 부분은 합리적으로 가정해서 진행하고, 최종 결과를 먼저 보여 줘.");
+    L.push("");
+    if((f.goal||"").trim()) L.push("■ 만들 것: "+f.goal.trim());
+    if((f.ctx||"").trim())  L.push("■ 사용 상황: "+f.ctx.trim());
+    if((f.feat||"").trim()) L.push("■ 핵심 기능:\n"+bullets(f.feat));
+    if((f.edge||"").trim()) L.push("■ 예외·규칙:\n"+bullets(f.edge));
+    if((f.design||"").trim()) L.push("■ 디자인·접근성: "+f.design.trim());
+    if((f.form||"").trim()) L.push("■ 출력·제약: "+f.form.trim());
+    L.push("");
+    L.push("■ 완료 기준: 위 동작이 모두 되는지 스스로 점검하고, 내가 빠뜨린 가정이 있으면 먼저 물어봐 줘. 다 되면 무엇을 만들었는지 한두 줄로 설명해 줘.");
+    return L.join("\n");
+  }
+  // generic builder binding
+  function bindBuilder(attr, outId){
+    var inputs=$all('['+attr+']');
+    function update(){
+      var f={}; inputs.forEach(function(t){ f[t.getAttribute(attr)]=t.value; });
+      var out=assemble(f); var el=document.getElementById(outId);
+      el.textContent = out!==null ? out : (attr==='data-f' ? "왼쪽 빈칸을 채우면 여기에 프롬프트가 만들어져요." : "과목을 고르고 빈칸을 채워 보세요.");
+      el._raw = out!==null ? out : "";
+    }
+    inputs.forEach(function(t){ t.addEventListener("input",update); });
+    update();
+    return {inputs:inputs, update:update};
+  }
+
+  var PRESETS={
+    quiz:{ctx:"중1 과학 ‘광합성’ 복습용. 학생들이 각자 휴대폰으로 풂",goal:"내가 넣은 문항으로 4지선다 자가채점 퀴즈 웹페이지",feat:"문항 5개(내용은 내가 교체 가능) / 보기를 클릭하면 맞고 틀림 즉시 표시 / 한 문제씩 넘기기 / 마지막에 점수와 ‘다시 풀기’",edge:"답을 고르기 전엔 다음으로 못 넘어가게 / 새로고침해도 진행 유지",design:"글씨 크게, 정답 초록·오답 빨강, 모바일 우선",form:"외부 라이브러리 없이 단일 HTML 파일 하나로"},
+    roulette:{ctx:"28명 학급, 교사가 노트북→TV로 띄움, 수업 중 1~2초 안에 한 명",goal:"학생 이름 중 무작위로 한 명 뽑는 ‘발표자 룰렛’ 웹페이지",feat:"이름을 줄바꿈으로 입력·수정(기본값 학생1~28) / ‘뽑기’ 누르면 1초 애니메이션 후 당첨자를 화면 중앙에 크게 표시 / ‘뽑은 사람 제외’ 토글 / ‘초기화’ 버튼",edge:"이름이 없거나 모두 뽑혔으면 에러 없이 안내 / 중복 이름 허용",design:"아주 큰 글씨·높은 대비·큰 버튼, 모바일 반응형",form:"외부 라이브러리 없이 단일 HTML 파일, 인터넷 없이도 작동"},
+    flash:{ctx:"중2 영어 단어 암기용, 학생 자습 시간",goal:"단어 카드를 뒤집어 외우는 플래시카드 웹페이지",feat:"내가 ‘단어=뜻’ 목록을 붙여넣어 교체 / 카드를 클릭하면 앞뒤가 뒤집힘 / 다음·이전 버튼과 순서 섞기 / 안 외운 카드만 다시 보기",edge:"목록이 비면 안내 / 형식이 살짝 틀려도 최대한 처리",design:"한 화면에 카드 하나 크게, 모바일에서 스와이프하듯",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    family:{ctx:"우리 가족 4명(엄마·아빠·아이 둘) 주간 일정 공유, 냉장고 옆 태블릿에 띄움",goal:"가족 주간 일정을 한눈에 보는 표 웹페이지",feat:"요일×사람 표에 일정 입력·수정 / 사람별 색 구분 / 오늘 칸 강조 / 일정 추가·삭제",edge:"빈 칸은 비워 두고, 일정이 많으면 칸 안에서 스크롤",design:"큰 글씨, 색으로 구분, 태블릿·모바일 반응형",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    clear:{ctx:"",goal:"",feat:"",edge:"",design:"",form:""}
+  };
+  var SCENARIOS={
+    "수업-퀴즈":{ctx:"중2 영어 단어, 학생이 각자 휴대폰으로 풂",goal:"내가 넣은 단어로 4지선다 자가채점 퀴즈 웹페이지",feat:"단어 목록을 붙여넣어 교체 / 보기 클릭 시 즉시 채점 / 문제 순서 섞기 / 끝에 점수·다시풀기",edge:"답 고르기 전엔 다음 잠금",design:"글씨 크게, 정답 초록·오답 빨강, 모바일 우선",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "수업-룰렛":{ctx:"28명 학급, 교사가 TV로 띄움, 1~2초 안에 한 명",goal:"무작위 발표자 뽑기 룰렛 웹페이지",feat:"이름 줄바꿈 입력·수정 / ‘뽑기’ 누르면 애니메이션 후 크게 표시 / 뽑은 사람 제외 토글 / 초기화",edge:"모두 뽑히면 에러 없이 안내",design:"아주 큰 글씨·큰 버튼·높은 대비",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "교무-통신문":{ctx:"학부모께 보낼 현장학습 안내",goal:"가정통신문 초안 글",feat:"날짜·장소·준비물·회신 기한 항목 / 정중한 학교 공문 말투 / 미정 항목은 [ ]로 표시",edge:"문장을 내가 고치기 쉽게 단락으로",design:"바로 복사·인쇄하기 좋은 형식",form:"줄글 텍스트(원하면 인쇄용 웹페이지)"},
+    "교무-점수":{ctx:"수행평가 채점, 학생 여러 명",goal:"가중치 점수 계산기 웹페이지",feat:"항목 4개 점수 입력 / 가중치(30·30·20·20%, 수정 가능)로 합산 / 환산점수·등급 표시 / 학생별 표로",edge:"빈 점수는 0 또는 제외 선택",design:"표 형태, 합계·등급 강조",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "학급-자리":{ctx:"28명 학급 자리 배치, 칠판 기준",goal:"무작위 자리 배치 도구 웹페이지",feat:"이름 목록 수정 / 다시 누르면 새로 섞기 / 좌석 그리드로 표시 / 특정 학생 고정 자리(선택)",edge:"인원과 자리 수가 안 맞으면 안내",design:"좌석표 크게, 모바일 가능",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "학급-역할":{ctx:"학급 1인 1역 배정",goal:"역할 무작위 배정 도구 웹페이지",feat:"이름·역할 목록 수정 / 무작위 배정 / 결과 표로 / 다시 배정",edge:"역할이 인원보다 적거나 많으면 안내",design:"표 형태, 한눈에",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "개인-투두":{ctx:"이번 주 내 할 일 관리, 휴대폰에서",goal:"요일별 투두 보드 웹페이지",feat:"요일별 할 일 추가·삭제 / 체크하면 줄 긋기 / 완료 개수·진행률 / ‘다음 주로 비우기’",edge:"빈 요일은 그대로 두기",design:"오늘 요일 강조, 모바일 우선",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "개인-시간표":{ctx:"내 주간 수업 시간표",goal:"요일×교시 시간표 표 웹페이지",feat:"칸에 과목·교실 입력·수정 / 빈 시간 회색 / 오늘 요일 강조 / 과목별 색 지정",edge:"",design:"한눈에 보이게 크게",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "가족-스케줄":{ctx:"가족 4명 주간 일정, 거실 태블릿",goal:"가족 주간 스케줄 표 웹페이지",feat:"요일×사람 일정 입력·수정 / 사람별 색 / 오늘 강조 / 추가·삭제",edge:"일정이 많으면 칸 안 스크롤",design:"큰 글씨·색 구분·반응형",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "가족-학원":{ctx:"아이 학원 일정 관리, 부모 휴대폰",goal:"학원 시간표 + 오늘 안내 웹페이지",feat:"학원(요일·시간·과목·장소·픽업) 목록 수정 / 오늘 갈 학원·시간 강조 / 다음 일정 안내 문구",edge:"오늘 학원이 없으면 ‘없음’ 표시",design:"휴대폰 우선, 큰 글씨",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "생활-다이어리":{ctx:"내 식사·운동 습관 돌아보기(점수·목표 없음)",goal:"하루 기록·주간 돌아보기 다이어리 웹페이지",feat:"날짜별로 먹은 것·운동 메모 / 한 주 메모 모아 보기 / 활동 횟수 간단 그래프",edge:"빈 날은 비워 두기",design:"부드러운 색, 모바일",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "생활-가계부":{ctx:"한 달 지출 관리",goal:"카테고리별 가계부 웹페이지",feat:"지출 입력(날짜·항목·금액·카테고리) / 카테고리·합계·남은 예산 / 비율 그래프 / 카테고리 수정",edge:"예산 초과 시 빨강 표시",design:"표+그래프, 모바일",form:"외부 라이브러리 없이 단일 HTML 파일"},
+    "생활-월급":{ctx:"월급 나누기",goal:"월급 분배 계산기 웹페이지",feat:"월급 입력 / 저축·고정지출·생활비 비율(50·30·20%, 수정 가능) 자동 분배 / 금액·그래프 표시",edge:"비율 합이 100%가 아니면 안내",design:"숫자 크게, 모바일",form:"외부 라이브러리 없이 단일 HTML 파일"}
+  };
+
+  // ---------- fix prompts ----------
+  var FIX={
+    small:"글씨가 너무 작아. 본문과 버튼 글씨를 더 크게 키워줘. 뒷자리 학생도 잘 보이게.",
+    color:"전체 색을 더 밝고 친근한 느낌으로 바꿔줘. 버튼은 눈에 잘 띄는 색으로.",
+    feature:"정답을 맞히면 짧은 축하 효과(애니메이션이나 효과음)를 넣어줘.",
+    mobile:"휴대폰 화면에서 글자랑 버튼이 깨져. 모바일에서도 깔끔하게 보이도록 반응형으로 고쳐줘.",
+    slow:"실행이 느려. 불필요한 부분을 줄여서 더 가볍고 빠르게 만들어줘."
+  };
+
+  // ---------- quizzes ----------
+  function buildQuiz(){
+    var opts=["복잡한 문법을 외우는 것","타자를 빨리 치는 것","원하는 것을 명확히 말하는 것","수학을 잘하는 것"];
+    var correct=2; var wrap=$("#quiz1opts"); var fb=$("#quiz1fb"); var locked=false;
+    opts.forEach(function(o,i){
+      var b=document.createElement("button"); b.className="opt"; b.textContent=o;
+      b.addEventListener("click",function(){
+        if(locked) return; locked=true;
+        if(i===correct){ b.classList.add("correct"); fb.className="feedback show good"; fb.textContent="정답! 코드를 직접 쓰지 않으니, ‘무엇을 원하는지’ 분명히 말하는 능력이 핵심이에요."; }
+        else { b.classList.add("wrong"); wrap.children[correct].classList.add("correct"); fb.className="feedback show bad"; fb.textContent="아쉬워요. 핵심은 ‘원하는 것을 명확히 말하기’예요. 문법·타자·수학은 필요 없습니다."; }
+      });
+      wrap.appendChild(b);
+    });
+  }
+  function buildTF(){
+    var fb=$("#tffb"); var locked=false;
+    $all("#tfcard [data-tf]").forEach(function(b){
+      b.addEventListener("click",function(){
+        if(locked) return; locked=true;
+        var v=b.getAttribute("data-tf");
+        if(v==="false"){ fb.className="feedback show good"; fb.textContent="맞아요, 거짓입니다. 첫 요청은 시작일 뿐 — 결과를 보고 여러 번 고치는 ‘반복’이 진짜 실력이에요."; }
+        else { fb.className="feedback show bad"; fb.textContent="사실은 ‘거짓’이에요. 한 줄로 끝나지 않습니다. 확인하고 수정하는 반복이 핵심이에요."; }
+      });
+    });
+  }
+
+  // ---------- events ----------
+  function wireEvents(){
+    document.addEventListener("click",function(e){
+      var into=e.target.closest("[data-into]");
+      if(into){ var fld=into.getAttribute("data-into"); var ta=document.querySelector('[data-f="'+fld+'"]'); if(ta){ var add=into.textContent.trim(); var sep=(fld==="feat")?" / ":", "; ta.value = ta.value.trim() ? (ta.value.trim()+sep+add) : add; if(typeof builderA!=="undefined"&&builderA) builderA.update(); toast("‘"+add+"’ 추가 — 자유롭게 수정하세요"); } return; }
+      var t=e.target.closest("[data-go],[data-complete],[data-copy],[data-preset],[data-fix]");
+      if(!t) return;
+      if(t.hasAttribute("data-complete")) complete(t.getAttribute("data-complete"));
+      if(t.hasAttribute("data-go")) go(t.getAttribute("data-go"));
+      if(t.hasAttribute("data-copy")){
+        var el=document.getElementById(t.getAttribute("data-copy"));
+        var txt=(el&&el._raw!==undefined&&el._raw!=="")?el._raw:(el?el.textContent:"");
+        if(txt && txt.indexOf("빈칸을 채우")<0 && txt.indexOf("골라 보세요")<0 && txt.indexOf("과목을 고르")<0){ copyText(txt); t.classList.add("ok"); t.textContent="복사됨 ✓"; setTimeout(function(){t.classList.remove("ok");t.textContent="복사";},1300); }
+        else { toast("먼저 내용을 채워 주세요"); }
+      }
+      if(t.hasAttribute("data-preset")){ var key=t.getAttribute("data-preset"); var p=PRESETS[key]; if(p){ $all('[data-f]').forEach(function(x){ x.value=p[x.getAttribute("data-f")]||""; }); builderA.update(); }
+        $all('.preset').forEach(function(x){x.classList.remove('on');});
+        if(key!=="clear"){ t.classList.add('on'); toast("‘"+t.textContent+"’ 템플릿을 불러왔어요"); } else { toast("빈칸을 비웠어요"); } }
+      if(t.hasAttribute("data-fix")){
+        $all("#fixwrap .fixbtn").forEach(function(x){x.classList.remove("active");}); t.classList.add("active");
+        var out=$("#fixOut"); out.textContent=FIX[t.getAttribute("data-fix")]; out._raw=FIX[t.getAttribute("data-fix")];
+      }
+    });
+    // checklists
+    $all("[data-check]").forEach(function(ul){
+      var key=ul.getAttribute("data-check");
+      $all("li",ul).forEach(function(li,i){
+        li.addEventListener("click",function(){
+          state.checks[key]=state.checks[key]||{};
+          state.checks[key][i]=!state.checks[key][i];
+          li.classList.toggle("on", !!state.checks[key][i]);
+          save();
+        });
+      });
+    });
+    // scenario picker fills the final builder
+    var sSel=$("#scenarioSelect");
+    if(sSel){ sSel.addEventListener("change",function(){
+      var s=SCENARIOS[sSel.value];
+      if(s){ $all('[data-sf]').forEach(function(x){ x.value=s[x.getAttribute("data-sf")]||""; }); }
+      builderB.update();
+    }); }
+    // mobile rail
+    $("#menuBtn").addEventListener("click",function(){ $("#rail").classList.add("open"); $("#scrim").classList.add("open"); });
+    $("#scrim").addEventListener("click",closeRail);
+    $("#resetBtn").addEventListener("click",function(){
+      if(!confirm("학습 진도를 모두 지울까요?")) return;
+      state.done={}; state.checks={}; state.counted=false; save();
+      $all("textarea").forEach(function(x){x.value="";}); var rs=$("#scenarioSelect"); if(rs) rs.value=""; builderA.update(); builderB.update();
+      go("welcome"); toast("진도를 초기화했어요");
+    });
+  }
+  function closeRail(){ $("#rail").classList.remove("open"); $("#scrim").classList.remove("open"); }
+
+  // ---------- init ----------
+  var builderA, builderB;
+  buildRail(); buildQuiz(); buildTF();
+  builderA=bindBuilder("data-f","builderOut");
+  builderB=bindBuilder("data-sf","subjOut");
+  wireEvents();
+  load(function(){ render(); showShared(); });
+})();
+</script>
+</body>
+</html>

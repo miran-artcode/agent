@@ -1,0 +1,1270 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Codex 실습 안내서</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
+<style>
+/* Layout: 흰 바탕 교사용 실습지. 왼쪽 설명 + 오른쪽 화면 그림, 누를 곳은 빨간 테두리 */
+:root{
+  --bg:#FFFFFF; --surface:#F7F8FA; --chrome:#EEF0F3; --ink:#1A1D21; --muted:#5F6670; --line:#E1E4E8;
+  --pen:#D93025; --pen-soft:#FCE8E6; --hl:#FFF3B0; --ok:#188038; --ok-soft:#E6F4EA; --blue:#1A73E8; --blue-soft:#E8F0FE;
+  --f:"Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f);font-size:16px;line-height:1.75;word-break:keep-all;overflow-wrap:break-word;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.wrap{max-width:1080px;margin:0 auto}
+a{color:var(--blue);text-underline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+h1,h2,h3,h4{font-family:var(--f);text-wrap:balance;margin:0;line-height:1.35;letter-spacing:-.01em}
+p{margin:0}
+
+nav.jump{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-block:10px}
+nav.jump ul{list-style:none;margin:0 auto;padding:0;display:flex;gap:6px;overflow-x:auto;max-width:1080px;scrollbar-width:none}
+nav.jump a{display:block;white-space:nowrap;font-size:14px;padding:5px 12px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:var(--ink);background:var(--bg)}
+nav.jump a:hover{border-color:var(--blue);color:var(--blue)}
+nav.jump a.lab{border-color:var(--pen);color:var(--pen)}
+
+header.top{padding-block:44px 24px;display:grid;gap:18px}
+.eyebrow{font-size:13px;letter-spacing:.06em;color:var(--muted);font-weight:500}
+header.top h1{font-size:clamp(30px,5.2vw,50px);font-weight:900;letter-spacing:-.02em}
+header.top h1 em{font-style:normal;color:var(--pen);box-shadow:inset 0 -.32em 0 var(--hl)}
+.lede{font-size:18px;max-width:64ch;color:var(--muted)}
+.lede b{color:var(--ink)}
+
+.timeline{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.timeline div{padding:10px;border-right:1px solid var(--line);min-width:0}
+.timeline div:last-child{border-right:0}
+.timeline b{display:block;font-size:13px;font-variant-numeric:tabular-nums;color:var(--pen)}
+.timeline span{display:block;font-size:13px;line-height:1.35}
+@media (max-width:760px){.timeline{grid-template-columns:repeat(4,minmax(0,1fr))}.timeline div:nth-child(-n+4){border-bottom:1px solid var(--line)}.timeline div:nth-child(4){border-right:0}}
+
+.map{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.map{grid-template-columns:minmax(0,1fr)}}
+.map a{display:grid;gap:4px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);text-decoration:none;color:var(--ink)}
+.map a:hover{border-color:var(--blue)}
+.map b{font-size:15px}
+.map span{font-size:13px;color:var(--muted);line-height:1.55}
+
+section.part{padding-block:44px 8px;border-top:1px solid var(--ink);margin-top:40px}
+.part-head{display:grid;gap:8px;margin-bottom:22px}
+.part-head .tag{font-size:13px;color:var(--pen);font-weight:700;letter-spacing:.02em}
+.part-head h2{font-size:clamp(24px,3.4vw,32px);font-weight:700}
+.part-head p{color:var(--muted);max-width:66ch}
+.sub{font-size:20px;font-weight:700;margin:30px 0 14px}
+
+.news{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(310px,100%),1fr));gap:16px}
+.news article{border:1px solid var(--line);border-radius:12px;overflow:hidden;display:grid;grid-template-rows:auto 1fr;background:var(--bg)}
+.news .art{background:var(--surface);border-bottom:1px solid var(--line);aspect-ratio:2/1;display:block}
+.news .art svg{display:block;width:100%;height:100%}
+.news .body{padding:16px 18px 16px;display:grid;gap:8px;align-content:start}
+.news .when{font-size:12.5px;color:var(--muted);font-weight:500}
+.news h3{font-size:18.5px;font-weight:700}
+.news p{font-size:15px}
+.news .ask{font-size:15px;font-weight:700;color:var(--pen)}
+.news .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.news .links a{font-size:13px;font-weight:500;text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:3px 11px;color:var(--blue);background:var(--bg)}
+.news .links a:hover{border-color:var(--blue);background:var(--blue-soft)}
+.news .links a.main{background:var(--blue);border-color:var(--blue);color:#fff}
+.art-note{font-size:12.5px;color:var(--muted);margin-top:10px}
+
+.terms{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr));gap:12px}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:grid;gap:6px;align-content:start}
+.term h3{font-size:17px;font-weight:700}
+.term p{font-size:15px}
+.term .like{font-size:14px;color:var(--muted)}
+.term .like b{color:var(--pen);font-weight:700;margin-right:6px}
+.term.touch{border-color:var(--ok);background:var(--bg)}
+.badge{display:inline-block;font-size:11.5px;font-weight:700;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+.badge.do{background:var(--ok-soft);color:var(--ok)}
+.badge.dont{background:var(--chrome);color:var(--muted)}
+
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));align-items:stretch;margin-bottom:8px}
+.flow .node{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:grid;gap:6px;align-content:start;position:relative;min-width:0}
+.flow .node + .node{margin-left:26px}
+.flow .node + .node::before{content:"→";position:absolute;left:-21px;top:50%;transform:translateY(-50%);color:var(--pen);font-weight:700;font-size:18px}
+.flow .k{font-size:12px;color:var(--muted);font-weight:500}
+.flow b{font-size:15.5px;line-height:1.35}
+.flow small{font-size:13px;color:var(--muted);line-height:1.5}
+.flow .say{background:var(--hl);border-color:var(--pen)}
+@media (max-width:860px){.flow{grid-template-columns:minmax(0,1fr);gap:26px}.flow .node + .node{margin-left:0}.flow .node + .node::before{content:"↓";left:50%;top:-25px;transform:translateX(-50%)}}
+
+.ftree{border:1px solid var(--line);border-radius:10px;padding:8px 0;display:grid}
+.fr{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:2px 16px;padding:5px 16px;font-size:14px;align-items:baseline}
+.fr:nth-child(odd){background:var(--surface)}
+.fr .fn{padding-left:calc(var(--d) * 1.4em);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fr .fd{color:var(--muted);font-size:13.5px}
+.fr.in .fn{color:var(--pen)} .fr.out .fn{color:var(--ok)} .fr.set .fn{color:var(--blue);font-weight:700} .fr.dim .fn{color:var(--muted);font-weight:400}
+@media (max-width:560px){.fr{grid-template-columns:minmax(0,1fr)}.fr .fd{padding-left:calc(var(--d) * 1.4em + 1.6em)}.fr .fd:empty{display:none}}
+
+.step{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:28px;padding-block:26px;border-bottom:1px dashed var(--line);align-items:start}
+.step:last-child{border-bottom:0}
+.step.solo{grid-template-columns:minmax(0,1fr)}
+@media (max-width:820px){.step{grid-template-columns:minmax(0,1fr);gap:16px}}
+.step-text{display:grid;gap:12px;min-width:0}
+.step-no{font-size:13px;color:var(--muted);font-weight:500}
+.step h3{font-size:21px;font-weight:700}
+ol.clicks{margin:0;padding:0;list-style:none;counter-reset:c;display:grid;gap:10px}
+ol.clicks > li{counter-increment:c;position:relative;padding-left:36px;min-height:26px}
+ol.clicks > li::before{content:counter(c);position:absolute;left:0;top:2px;width:25px;height:25px;background:var(--pen);color:#fff;border-radius:50%;
+  display:grid;place-items:center;font-size:13px;font-weight:700;line-height:1}
+ol.clicks .why{display:block;font-size:14px;color:var(--muted)}
+.btn{display:inline-block;font-weight:700;padding:0 7px;border:1px solid var(--line);border-radius:5px;background:var(--chrome);font-size:.92em;line-height:1.6;white-space:nowrap}
+.fname{font-size:.9em;background:var(--blue-soft);color:#174EA6;border-radius:4px;padding:0 5px;font-weight:500}
+kbd{font-family:var(--f);font-size:.86em;font-weight:700;padding:1px 7px;border:1px solid #C9CDD2;border-bottom-width:3px;border-radius:5px;background:var(--bg);white-space:nowrap}
+.note{font-size:14px;color:var(--muted);border-left:3px solid var(--line);padding-left:12px}
+.warn{font-size:14.5px;background:var(--pen-soft);border-radius:8px;padding:10px 12px}
+.good{font-size:14.5px;background:var(--ok-soft);border-radius:8px;padding:10px 12px}
+.tip{font-size:14.5px;background:var(--blue-soft);border-radius:8px;padding:10px 12px}
+.check{border:1px solid var(--ok);border-radius:10px;padding:10px 14px;display:grid;gap:4px}
+.check b{color:var(--ok);font-size:14px}
+.check ul{margin:0;padding-left:20px;font-size:14.5px}
+
+.say-box{display:flex;align-items:center;gap:12px;flex-wrap:wrap;border:2px solid var(--pen);border-radius:12px;padding:10px 14px}
+.say-box .lbl{font-size:13px;color:var(--muted);font-weight:700}
+.say-box .words{font-size:19px;font-weight:700;flex:1 1 12em;min-width:0}
+.say-box button,.prompt-bar button{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:3px 12px;cursor:pointer}
+button.done{color:var(--ok);border-color:var(--ok)}
+.prompt{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.prompt-bar{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);background:var(--surface)}
+.prompt-bar span{font-size:12.5px;color:var(--muted);font-weight:700}
+.prompt pre{margin:0;padding:12px 14px;font-family:var(--f);font-size:14.5px;line-height:1.65;white-space:pre-wrap}
+
+.io{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:560px){.io{grid-template-columns:minmax(0,1fr)}}
+.io > div{border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;gap:6px;align-content:start;min-width:0}
+.io h4{font-size:13px;font-weight:700;color:var(--muted)}
+.io ul{margin:0;padding-left:18px;font-size:14.5px;display:grid;gap:3px}
+.io .in{border-color:#F4B7B1} .io .in h4{color:var(--pen)}
+.io .out{border-color:#A8DAB5} .io .out h4{color:var(--ok)}
+.io small{color:var(--muted);font-size:13px;line-height:1.55}
+
+.todo{border:1px solid var(--line);border-radius:12px;padding:6px 0;display:grid}
+.todo label{display:flex;gap:12px;align-items:flex-start;padding:9px 16px;cursor:pointer;font-size:15px}
+.todo label:nth-child(even){background:var(--surface)}
+.todo input{width:20px;height:20px;margin-top:3px;accent-color:var(--ok);flex:none}
+.todo input:checked + span{color:var(--muted);text-decoration:line-through}
+.todo-meta{font-size:13px;color:var(--muted);margin-top:8px}
+
+figure.shot{margin:0;min-width:0}
+figure.shot figcaption{font-size:12.5px;color:var(--muted);margin-top:6px}
+.win{border:1px solid #D3D7DC;border-radius:10px;background:var(--bg);overflow:hidden;font-size:13px;line-height:1.45;box-shadow:0 2px 8px rgba(26,29,33,.06)}
+.win-bar{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--chrome);border-bottom:1px solid var(--line);font-size:12px;color:var(--muted);min-width:0}
+.win-bar .t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.win-bar .dots{margin-left:auto;letter-spacing:6px;flex:none;font-size:10px}
+.app{display:grid;grid-template-columns:minmax(0,38%) minmax(0,1fr);min-height:220px}
+.side{border-right:1px solid var(--line);padding:10px 8px;display:grid;gap:3px;align-content:start;background:var(--surface);min-width:0}
+.side .row{padding:5px 8px;border-radius:6px;display:flex;gap:7px;align-items:center;white-space:nowrap;overflow:hidden;min-width:0}
+.side .row i{font-style:normal;width:14px;text-align:center;color:var(--muted);flex:none}
+.side .row .more{margin-left:auto;color:var(--muted);font-style:normal}
+.side .label{font-size:11px;color:var(--muted);padding:8px 8px 2px;letter-spacing:.04em}
+.side .switch{font-weight:700;border:1px solid var(--line);background:var(--bg);justify-content:space-between}
+.main{padding:12px;display:grid;gap:10px;align-content:start;min-width:0}
+.bubble{background:var(--chrome);border-radius:10px;padding:8px 10px;justify-self:end;max-width:88%}
+.composer{border:1px solid var(--line);border-radius:12px;padding:8px 10px;display:grid;gap:8px}
+.composer .ph{color:var(--muted)}
+.composer .tools{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.composer .send{margin-left:auto;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:12px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 9px;font-size:12px;background:var(--bg);white-space:nowrap}
+.menu{border:1px solid var(--line);border-radius:8px;background:var(--bg);padding:4px;display:grid;gap:2px;font-size:12.5px;box-shadow:0 4px 12px rgba(26,29,33,.08)}
+.menu div{padding:5px 8px;border-radius:5px}
+.menu .on{background:var(--chrome);font-weight:700}
+.agent{border:1px solid var(--line);border-radius:8px;padding:6px 9px;display:flex;justify-content:space-between;gap:8px;font-size:12.5px;min-width:0}
+.agent em{font-style:normal;color:var(--muted);white-space:nowrap}
+.agent .st{color:var(--ok);font-weight:700;white-space:nowrap}
+.approve{border:1px solid #F4B7B1;background:#FFF8F7;border-radius:10px;padding:10px;display:grid;gap:8px;font-size:12.5px}
+.approve .acts{display:flex;gap:6px;flex-wrap:wrap}
+.approve .yes{background:var(--ink);color:#fff;border-radius:6px;padding:3px 12px;font-weight:700}
+.approve .no{border:1px solid var(--line);border-radius:6px;padding:3px 12px;background:var(--bg)}
+.card-sm{border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.logo{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;font-weight:700;color:#fff;background:#7D2AE8;flex:none;font-size:13px}
+.search{border:1px solid var(--line);border-radius:8px;padding:6px 10px;background:var(--surface)}
+.files{padding:10px 12px;display:grid;gap:3px;font-size:12.5px}
+.files .dim{color:var(--muted)}
+.folder-row{display:flex;justify-content:space-between;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-size:12.5px;min-width:0}
+.folder-row span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.tagp{font-size:11px;font-weight:700;color:var(--ok);background:var(--ok-soft);border-radius:999px;padding:1px 8px;white-space:nowrap}
+.num{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--pen);color:#fff;font-size:10.5px;font-weight:700;flex:none;line-height:1}
+
+.xl{border-collapse:collapse;width:100%;font-size:12.5px;min-width:0}
+.xl td,.xl th{border:1px solid var(--line);padding:4px 7px;text-align:left}
+.xl th{background:#E6F4EA;font-weight:700}
+.xl td.y{background:var(--hl)}
+.xl td.rn{background:var(--chrome);color:var(--muted);width:26px;text-align:center}
+.sheet-tabs{display:flex;gap:2px;padding:6px 8px 0;border-top:1px solid var(--line);background:var(--chrome);flex-wrap:wrap}
+.sheet-tabs span{font-size:12px;padding:3px 10px;border-radius:5px 5px 0 0;background:var(--surface);color:var(--muted)}
+.sheet-tabs span.on{background:var(--bg);color:var(--ok);font-weight:700;border-bottom:2px solid var(--ok)}
+
+.mk{outline:2.5px solid var(--pen);outline-offset:2px;border-radius:7px;background:var(--hl)}
+.pen{font-size:13px;font-weight:700;color:var(--pen);line-height:1.3}
+.pen::before{content:"◀ "}
+
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--muted);font-weight:700;background:var(--surface)}
+tr:last-child td{border-bottom:0}
+td b{white-space:nowrap}
+
+footer{padding-block:40px 60px;font-size:13.5px;color:var(--muted);display:grid;gap:10px}
+footer ul{margin:0;padding-left:18px;display:grid;gap:4px}
+@media (prefers-reduced-motion:no-preference){button{transition:color .15s,border-color .15s}}
+</style>
+
+<nav class="jump" aria-label="바로가기">
+  <ul>
+    <li><a href="#news">AI 근황</a></li>
+    <li><a href="#todo">준비 체크리스트</a></li>
+    <li><a href="#basics">컴퓨터 기본 조작</a></li>
+    <li><a href="#words">먼저 알아 둘 말</a></li>
+    <li><a href="#install">설치</a></li>
+    <li><a href="#tour">화면 둘러보기</a></li>
+    <li><a href="#folders">프로젝트와 폴더</a></li>
+    <li><a href="#perm">권한·Canva</a></li>
+    <li><a href="#settings">설정 엑셀</a></li>
+    <li><a class="lab" href="#lab-a">실습 A–F</a></li>
+    <li><a href="#results">결과 확인</a></li>
+    <li><a href="#mywork">내 업무에 쓰기</a></li>
+    <li><a href="#help">막힐 때</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">교사 연수 · 90분 · 처음 쓰는 선생님을 위한 따라 하기 실습지</div>
+  <h1>파일 넣고 <em>"처리해"</em> 한 마디</h1>
+  <p class="lede">선생님이 다루는 파일은 <b>워드와 엑셀</b>뿐입니다. 작업 폴더의 <b>넣는곳</b>에 파일을 넣고 Codex에게 <b>"처리해"</b>라고 쓰면, 여러 AI가 일을 나눠 맡아 <b>결과</b> 폴더에 워드·엑셀 파일을 만들어 둡니다. 컴퓨터가 낯설어도 순서대로 따라 하면 됩니다.</p>
+  <div class="timeline" role="list" aria-label="90분 진행 순서">
+    <div role="listitem"><b>5분</b><span>AI 근황</span></div>
+    <div role="listitem"><b>10분</b><span>A 첫 실행</span></div>
+    <div role="listitem"><b>20분</b><span>B 시험문제</span></div>
+    <div role="listitem"><b>15분</b><span>C 수업 PPT</span></div>
+    <div role="listitem"><b>15분</b><span>D 피드백</span></div>
+    <div role="listitem"><b>10분</b><span>E 포스터</span></div>
+    <div role="listitem"><b>10분</b><span>F 예약 실행</span></div>
+    <div role="listitem"><b>5분</b><span>마무리</span></div>
+  </div>
+  <div class="map">
+    <a href="#todo"><b>연수 전에 (집에서 20분)</b><span>체크리스트 따라 앱 설치, 로그인, 실습 폴더 연결, Canva 연결</span></a>
+    <a href="#lab-a"><b>연수 당일</b><span>실습 A~F. 예시 파일을 넣고 "처리해"</span></a>
+    <a href="#mywork"><b>연수 다음 날부터</b><span>내 컴퓨터 업무 폴더에 연결해 실제 업무에 쓰기</span></a>
+  </div>
+  <p class="note">Codex는 <b>ChatGPT 데스크톱 앱</b> 안에 있습니다. 버튼 이름은 OpenAI 공식 안내의 영어 표기를 따랐고, 한국어 화면에서는 번역된 이름으로 보일 수 있습니다. 화면 그림은 공식 안내를 바탕으로 그린 예시입니다.</p>
+</header>
+
+<section class="part" id="news">
+  <div class="part-head">
+    <span class="tag">시작 5분 · 2026년 11월 첫째 주 기준</span>
+    <h2>요즘 AI, 무슨 일이 있었나</h2>
+    <p>한 장씩 보며 이야기하고, 빨간 질문 하나를 던져 보세요. 파란 단추를 누르면 기사 원문이 새 창으로 열립니다.</p>
+  </div>
+  <div class="news">
+    <article>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 320 160"><rect width="320" height="160" fill="#EEF3FD"/>
+        <text x="24" y="40" font-family="Noto Sans KR,sans-serif" font-size="20" font-weight="900" fill="#1A1D21">GPT-6</text>
+        <g font-family="Noto Sans KR,sans-serif" font-size="13" font-weight="700">
+          <rect x="24" y="62" width="82" height="62" rx="10" fill="#1A73E8"/><text x="65" y="98" text-anchor="middle" fill="#fff">Sol</text>
+          <rect x="118" y="62" width="82" height="62" rx="10" fill="#8AB4F8"/><text x="159" y="98" text-anchor="middle" fill="#0B2E66">Luna</text>
+          <rect x="212" y="62" width="84" height="62" rx="10" fill="#fff" stroke="#D93025" stroke-width="2" stroke-dasharray="5 4"/><text x="254" y="90" text-anchor="middle" fill="#D93025">Astra 6.1</text>
+          <rect x="244" y="98" width="6" height="16" rx="2" fill="#D93025"/><rect x="258" y="98" width="6" height="16" rx="2" fill="#D93025"/></g>
+        <text x="296" y="146" text-anchor="end" font-family="Noto Sans KR,sans-serif" font-size="11" fill="#5F6670">출시 보류</text></svg></div>
+      <div class="body">
+        <span class="when">9월 22일 · 9월 29일</span>
+        <h3>GPT-6 시대, 출시가 보류된 모델</h3>
+        <p>OpenAI가 9월 22일 GPT-6 Sol과 Luna를 내놓았고, Luna는 무료 사용자도 데스크톱 앱에서 쓸 수 있게 됐습니다. 일주일 뒤 GPT-6.1 Sol이 나왔고, 함께 나올 예정이던 GPT-6.1 Astra는 내부 시험에서 속이려는 경향이 보여 출시가 미뤄졌다고 보도됐습니다.</p>
+        <p class="ask">오늘 쓸 Codex도 이 모델들로 움직입니다.</p>
+        <div class="links"><a class="main" href="https://techcrunch.com/2026/09/22/openai-launches-gpt-6-sol-and-luna/" target="_blank" rel="noopener">TechCrunch 원문 ↗</a><a href="https://www.digitaltoday.co.kr/cn/view/108785/openai-unveils-gpt-6-1-sol-near-astra-performance-at-one-fifth-the-price" target="_blank" rel="noopener">GPT-6.1 Sol · DigitalToday ↗</a></div>
+      </div>
+    </article>
+    <article>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 320 160"><rect width="320" height="160" fill="#FDF1E6"/>
+        <path d="M70 46 Q120 34 160 50 Q200 34 250 46 V128 Q200 116 160 132 Q120 116 70 128 Z" fill="#fff" stroke="#C26401" stroke-width="2"/>
+        <line x1="160" y1="50" x2="160" y2="132" stroke="#C26401" stroke-width="2"/>
+        <g stroke="#E3C4A3" stroke-width="3" stroke-linecap="round"><line x1="88" y1="66" x2="146" y2="62"/><line x1="88" y1="80" x2="146" y2="76"/><line x1="88" y1="94" x2="136" y2="90"/><line x1="174" y1="62" x2="232" y2="66"/><line x1="174" y1="90" x2="232" y2="94"/><line x1="174" y1="104" x2="220" y2="108"/></g>
+        <rect x="172" y="70" width="64" height="14" rx="4" fill="#FFF3B0"/><text x="204" y="81" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="10" font-weight="700" fill="#D93025">AI 문장 1</text>
+        <circle cx="262" cy="40" r="20" fill="#F9AB00"/><path d="M252 56 L246 78 L258 72 L262 82 L266 60 Z" fill="#D93025"/>
+        <text x="262" y="45" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="13" font-weight="900" fill="#fff">1</text></svg></div>
+      <div class="body">
+        <span class="when">11월 3~4일 · 프랑스</span>
+        <h3>AI 썼다고 밝힌 작가가 공쿠르상</h3>
+        <p>필리프 자에나다가 프랑스 최고 문학상을 받은 다음 날, 집필 중 AI를 세 번 썼다고 공개했습니다. ChatGPT 문장 하나를 일부러 넣었고, 엉뚱한 답을 풍자했고, 자료 조사에 썼습니다. 9월에는 AI를 대량으로 쓴 의혹을 부인하던 다른 후보가 명단에서 빠졌습니다.</p>
+        <p class="ask">AI가 무엇을 했나? 얼마나? 먼저 밝혔나?</p>
+        <div class="links"><a class="main" href="https://www.euronews.com/2026/11/04/goncourt-2026-winner-philippe-jaenada-admits-using-ai-in-novel-sparking-ai-debate-in-liter" target="_blank" rel="noopener">Euronews 원문 ↗</a><a href="https://etcjournal.com/2026/11/05/top-ai-stories-for-november-3-5-2026-what-is-rsi-and-why-is-it-concerning/" target="_blank" rel="noopener">해설 · ETC Journal ↗</a></div>
+      </div>
+    </article>
+    <article>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 320 160"><rect width="320" height="160" fill="#14213D"/>
+        <g fill="#fff" opacity=".7"><circle cx="30" cy="24" r="1.4"/><circle cx="80" cy="56" r="1"/><circle cx="140" cy="20" r="1.2"/><circle cx="290" cy="30" r="1.4"/><circle cx="250" cy="70" r="1"/><circle cx="40" cy="90" r="1"/></g>
+        <path d="M-20 170 Q160 92 340 170 Z" fill="#1A73E8"/><path d="M-20 170 Q160 104 340 170 Z" fill="#34A853" opacity=".55"/>
+        <g transform="translate(120 52) rotate(-12)"><rect x="-34" y="-8" width="26" height="16" fill="#8AB4F8"/><rect x="8" y="-8" width="26" height="16" fill="#8AB4F8"/><rect x="-8" y="-11" width="16" height="22" rx="3" fill="#E8EAED"/></g>
+        <path d="M150 50 h108 a8 8 0 0 1 8 8 v34 a8 8 0 0 1 -8 8 h-80 l-12 10 v-10 h-16 a8 8 0 0 1 -8 -8 v-34 a8 8 0 0 1 8 -8z" fill="#fff"/>
+        <text x="208" y="70" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="11" font-weight="700" fill="#1A1D21">우주 하이쿠</text>
+        <g stroke="#BDC1C6" stroke-width="3" stroke-linecap="round"><line x1="168" y1="82" x2="248" y2="82"/><line x1="176" y1="92" x2="240" y2="92"/></g></svg></div>
+      <div class="body">
+        <span class="when">10월 30일 · 우주</span>
+        <h3>지구 궤도에서 쓴 하이쿠</h3>
+        <p>구글이 10월 1일 띄운 시험 위성(Project Suncatcher)의 데이터센터급 AI 칩에서, 위성에 실린 Gemma 4 모델이 우주를 주제로 하이쿠를 써 보냈습니다. 궤도에서 이런 칩이 만든 첫 AI 응답입니다.</p>
+        <p class="ask">데이터센터가 우주로 가려는 이유는?</p>
+        <div class="links"><a class="main" href="https://blog.google/innovation-and-ai/models-and-research/google-research/project-suncatcher-satellite-response/" target="_blank" rel="noopener">Google 블로그 원문 ↗</a></div>
+      </div>
+    </article>
+    <article>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 320 160"><rect width="320" height="160" fill="#F1F3F4"/>
+        <text x="96" y="112" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="88" font-weight="900" fill="#1A1D21">4</text>
+        <text x="96" y="138" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="11" fill="#5F6670">AI 에이전트가 부른 승차</text>
+        <g transform="translate(190 64)"><path d="M0 34 L8 14 Q11 8 18 8 H64 Q71 8 74 14 L82 34 V52 H0 Z" fill="#1A1D21"/><rect x="14" y="14" width="24" height="14" rx="3" fill="#8AB4F8"/><rect x="44" y="14" width="24" height="14" rx="3" fill="#8AB4F8"/><circle cx="18" cy="54" r="9" fill="#5F6670"/><circle cx="64" cy="54" r="9" fill="#5F6670"/></g>
+        <text x="231" y="46" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="12" font-weight="700" fill="#D93025">3분기 전체</text></svg></div>
+      <div class="body">
+        <span class="when">11월 4일 · 미국</span>
+        <h3>AI 비서가 부른 우버, 석 달에 4대</h3>
+        <p>우버 재무책임자가 실적 발표에서, 외부 AI 에이전트가 예약해 실제로 운행한 승차가 3분기에 모두 4건이었다고 밝혔습니다. 음식 배달 주문도 약 500건 수준이었습니다. AI가 사람 대신 예약하는 일은 아직 걸음마 단계입니다.</p>
+        <p class="ask">우리 업무에선 어디까지 맡길 수 있을까?</p>
+        <div class="links"><a class="main" href="https://www.theverge.com/transportation/1026306/uber-ai-agents-q3-earnings-disintermediation" target="_blank" rel="noopener">The Verge 원문 ↗</a><a href="https://tech-insider.org/uber-ai-agents-four-rides-500-eats-orders-q3-2026/" target="_blank" rel="noopener">Tech Insider ↗</a></div>
+      </div>
+    </article>
+    <article>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 320 160"><rect width="320" height="160" fill="#E6F4EA"/>
+        <path d="M30 132 V72 L84 44 L138 72 V132 Z" fill="#fff" stroke="#188038" stroke-width="2"/><rect x="72" y="100" width="24" height="32" fill="#188038"/>
+        <g fill="#A8DAB5"><rect x="44" y="82" width="16" height="14"/><rect x="108" y="82" width="16" height="14"/></g>
+        <rect x="160" y="56" width="136" height="30" rx="15" fill="#fff" stroke="#BDC1C6"/><circle cx="178" cy="71" r="6" fill="none" stroke="#5F6670" stroke-width="2"/><line x1="182" y1="75" x2="187" y2="80" stroke="#5F6670" stroke-width="2"/>
+        <text x="196" y="76" font-family="Noto Sans KR,sans-serif" font-size="12" fill="#9AA0A6">검색</text>
+        <g transform="translate(206 104)"><rect width="46" height="24" rx="12" fill="#BDC1C6"/><circle cx="12" cy="12" r="9" fill="#fff"/></g>
+        <text x="262" y="121" font-family="Noto Sans KR,sans-serif" font-size="11" font-weight="700" fill="#5F6670">OFF</text></svg></div>
+      <div class="body">
+        <span class="when">11월 3~4일 · 학교</span>
+        <h3>학교가 AI를 끄면 검색도 꺼진다?</h3>
+        <p>구글이 학교용 서비스에서 AI 도구를 켜지 않으면 검색도 쓸 수 없게 하는 정책을 발표해 반발을 샀습니다. 구글은 Gemini와 검색을 모두 기본으로 끄고 학교가 하나씩 켤 수 있게 했다고 해명했습니다.</p>
+        <p class="ask">학교의 AI 선택권, 어디까지 보장돼야 할까?</p>
+        <div class="links"><a class="main" href="https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/" target="_blank" rel="noopener">TechCrunch 원문 ↗</a><a href="https://www.cnbc.com/2026/11/03/google-responds-to-outrage-over-removing-search-in-schools-that-ban-ai.html" target="_blank" rel="noopener">CNBC ↗</a></div>
+      </div>
+    </article>
+    <article>
+      <div class="art" aria-hidden="true"><svg viewBox="0 0 320 160"><rect width="320" height="160" fill="#FCE8E6"/>
+        <rect x="56" y="24" width="72" height="120" rx="12" fill="#1A1D21"/><rect x="62" y="34" width="60" height="98" rx="6" fill="#fff"/>
+        <rect x="68" y="44" width="44" height="14" rx="7" fill="#E8EAED"/><rect x="76" y="64" width="40" height="14" rx="7" fill="#8AB4F8"/><rect x="68" y="84" width="38" height="14" rx="7" fill="#E8EAED"/>
+        <path d="M218 34 L262 50 V84 Q262 114 218 132 Q174 114 174 84 V50 Z" fill="#fff" stroke="#D93025" stroke-width="3"/>
+        <path d="M200 84 l12 12 l22 -24" fill="none" stroke="#D93025" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="218" y="150" text-anchor="middle" font-family="Noto Sans KR,sans-serif" font-size="11" font-weight="700" fill="#D93025">미성년자 보호</text></svg></div>
+      <div class="body">
+        <span class="when">10월 30일 서명 · 뉴욕주</span>
+        <h3>챗봇은 아이에게 사람인 척 금지</h3>
+        <p>뉴욕주가 미성년자에게 위험한 AI 동반자 챗봇 기능을 막는 법을 확정했습니다. 사람이라고 믿게 만드는 말, 정서적 애착을 키우는 기능, 아첨, 자해를 부추기는 내용이 금지 대상이며 2027년 6월 1일부터 시행됩니다.</p>
+        <p class="ask">학생들은 챗봇을 친구로 느낄까?</p>
+        <div class="links"><a class="main" href="https://www.nysenate.gov/newsroom/press-releases/2026/kristen-gonzalez/senator-kristen-gonzalez-bans-unsafe-chatbot-feature" target="_blank" rel="noopener">뉴욕주 상원 발표 원문 ↗</a></div>
+      </div>
+    </article>
+  </div>
+  <p class="art-note">카드 위 그림은 이 안내서를 위해 새로 그린 설명용 그림입니다. 기사 사진은 저작권이 있어 원문 링크로 보시면 됩니다.</p>
+</section>
+
+<section class="part" id="todo">
+  <div class="part-head">
+    <span class="tag">연수 전 · 집에서 20분</span>
+    <h2>준비 체크리스트</h2>
+    <p>하나씩 끝낼 때마다 눌러 표시하세요. 표시는 이 컴퓨터의 이 브라우저에만 남습니다. 막히면 옆의 링크를 눌러 자세한 설명으로 갑니다.</p>
+  </div>
+  <div class="todo" id="todo-list">
+    <label><input type="checkbox" id="t1"><span>파일 탐색기 여는 법, 복사해서 붙여 넣기를 안다 → <a href="#basics">컴퓨터 기본 조작</a></span></label>
+    <label><input type="checkbox" id="t2"><span>ChatGPT 데스크톱 앱을 설치했다 → <a href="#install">설치</a></span></label>
+    <label><input type="checkbox" id="t3"><span>ChatGPT 계정으로 로그인했다</span></label>
+    <label><input type="checkbox" id="t4"><span>왼쪽 위에서 Codex로 바꿀 수 있다</span></label>
+    <label><input type="checkbox" id="t5"><span>AI연수실습.zip을 바탕화면에 풀었다 → <a href="#folders">프로젝트와 폴더</a></span></label>
+    <label><input type="checkbox" id="t6"><span>AI연수실습 폴더로 프로젝트를 만들었다</span></label>
+    <label><input type="checkbox" id="t7"><span>권한을 Ask for approval로 골랐다 → <a href="#perm">권한·Canva</a></span></label>
+    <label><input type="checkbox" id="t8"><span>Canva 플러그인을 설치하고 로그인했다</span></label>
+    <label><input type="checkbox" id="t9"><span>실습 A의 첫 질문에 표가 나왔다 → <a href="#lab-a">실습 A</a></span></label>
+  </div>
+  <p class="todo-meta" id="todo-count" aria-live="polite">0 / 9 완료</p>
+</section>
+
+<section class="part" id="basics">
+  <div class="part-head">
+    <span class="tag">처음이라면 여기부터 · 5분</span>
+    <h2>컴퓨터 기본 조작</h2>
+    <p>실습에서 계속 쓰는 동작입니다. 이미 아는 것은 건너뛰세요. Windows 11 기준이며 Windows 10도 거의 같습니다.</p>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th style="width:24%">하고 싶은 일</th><th>이렇게 합니다</th></tr></thead>
+      <tbody>
+        <tr><td><b>파일 탐색기 열기</b></td><td>키보드 왼쪽 아래 <kbd>⊞ Windows</kbd> 키를 누른 채 <kbd>E</kbd>를 누릅니다. 또는 화면 맨 아래 작업 표시줄의 <b>노란 폴더</b> 아이콘을 누릅니다.</td></tr>
+        <tr><td><b>창 두 개 나란히 놓기</b></td><td>창 하나를 누르고 <kbd>⊞</kbd>+<kbd>←</kbd>를 누르면 왼쪽 절반으로 갑니다. 오른쪽에 뜨는 다른 창을 누르면 나머지 절반을 채웁니다.</td></tr>
+        <tr><td><b>파일 여러 개 고르기</b></td><td>하나씩: <kbd>Ctrl</kbd>을 누른 채 파일을 차례로 클릭. 폴더 안 전부: <kbd>Ctrl</kbd>+<kbd>A</kbd></td></tr>
+        <tr><td><b>복사해서 붙여 넣기</b></td><td>파일을 고르고 <kbd>Ctrl</kbd>+<kbd>C</kbd> → 넣을 폴더를 열고 빈 곳을 한 번 누른 뒤 <kbd>Ctrl</kbd>+<kbd>V</kbd>. 원본은 그대로 남습니다. 실습에서는 이 방법을 씁니다.</td></tr>
+        <tr><td><b>끌어다 놓기</b></td><td>파일 위에서 마우스 왼쪽 단추를 누른 채 다른 폴더 창으로 옮긴 뒤 손을 뗍니다. 같은 드라이브 안에서는 <b>이동</b>(원본이 사라짐)입니다.</td></tr>
+        <tr><td><b>파일 끝 이름(.docx 등) 보이게</b></td><td>파일 탐색기 위쪽 <span class="btn">보기</span> → <span class="btn">표시</span> → <b>파일 확장명</b>에 체크. 같은 메뉴의 <b>숨긴 항목</b>에 체크하면 숨김 폴더도 보입니다. Windows 10은 위쪽 <span class="btn">보기</span> 탭에 두 칸이 있습니다.</td></tr>
+        <tr><td><b>압축 파일(.zip) 풀기</b></td><td>파일을 오른쪽 클릭 → <span class="btn">압축 풀기</span>(또는 모두 압축 풀기) → 풀 위치를 고르고 <span class="btn">압축 풀기</span>.</td></tr>
+        <tr><td><b>앱 다시 찾기</b></td><td>화면 아래 <kbd>⊞</kbd> 시작 단추를 누르고 <b>ChatGPT</b>를 입력하면 나옵니다. 오른쪽 클릭 → <b>작업 표시줄에 고정</b>하면 다음부터 한 번에 엽니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <h3>실습 내내 쓰는 화면 배치</h3>
+      <ol class="clicks">
+        <li>ChatGPT 앱을 열고 <kbd>⊞</kbd>+<kbd>←</kbd>로 화면 왼쪽 절반에 놓습니다.</li>
+        <li>파일 탐색기(<kbd>⊞</kbd>+<kbd>E</kbd>)를 열고 바탕 화면 → AI연수실습으로 들어갑니다.</li>
+        <li>파일 탐색기를 누르고 <kbd>⊞</kbd>+<kbd>→</kbd>로 오른쪽 절반에 놓습니다.</li>
+      </ol>
+      <p class="tip">이렇게 놓으면 오른쪽에서 파일을 넣고, 왼쪽에서 "처리해"라고 쓰고, 다시 오른쪽에서 결과를 여는 흐름이 한눈에 보입니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">화면 전체</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px;min-height:170px">
+          <div class="win" style="box-shadow:none"><div class="win-bar"><span class="t">ChatGPT · Codex</span></div><div class="main"><div class="bubble">처리해</div><div class="composer"><span class="ph">무엇을 할까요?</span></div></div></div>
+          <div class="win" style="box-shadow:none"><div class="win-bar"><span class="t">AI연수실습</span></div><div class="files"><div>📁 1_시험문제</div><div>📁 2_수업PPT</div><div>📁 3_수행평가피드백</div><div>📁 4_행사포스터</div></div></div>
+        </div>
+      </div>
+      <figcaption>왼쪽 앱, 오른쪽 파일 탐색기</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="words">
+  <div class="part-head">
+    <span class="tag">읽고 시작하기 · 3분</span>
+    <h2>먼저 알아 둘 말</h2>
+    <p>초록 테두리는 선생님이 직접 만지는 것, 회색 표시는 만질 필요 없는 것입니다.</p>
+  </div>
+  <div class="terms">
+    <div class="term"><h3>ChatGPT 앱</h3><p>컴퓨터에 설치하는 프로그램 하나입니다. 안에 <b>ChatGPT</b>(대화)와 <b>Codex</b>(파일 작업)가 함께 들어 있고, 왼쪽 위에서 바꿔 씁니다.</p></div>
+    <div class="term"><h3>Codex</h3><p>내 컴퓨터 폴더 속 파일을 직접 열어 읽고, 새 파일을 만들어 저장하는 AI입니다. 파일을 하나하나 올리지 않아도 됩니다.</p><p class="like"><b>비유</b>폴더 열쇠를 받은 보조 선생님</p></div>
+    <div class="term touch"><h3>프로젝트 <span class="badge do">직접 만듦</span></h3><p>폴더와 대화를 한데 묶은 업무 묶음입니다. 프로젝트에 연결한 폴더만 Codex가 열 수 있습니다.</p><p class="like"><b>비유</b>업무별 서랍. 서랍에 넣어 준 폴더만 꺼내 봄</p></div>
+    <div class="term touch"><h3>New chat (대화) <span class="badge do">직접 누름</span></h3><p>일 하나를 시킬 때마다 여는 대화 창입니다. 일이 바뀌면 새 대화를 엽니다.</p></div>
+    <div class="term touch"><h3>넣는곳 · 결과 · 완료 <span class="badge do">파일 넣고 꺼냄</span></h3><p><b>넣는곳</b>에 처리할 파일을 넣고, <b>결과</b>에서 만들어진 파일을 꺼냅니다. 다 쓴 입력 파일은 <b>완료</b>로 옮겨집니다.</p><p class="like"><b>비유</b>결재함 세 칸: 들어온 서류, 처리된 서류, 보관함</p></div>
+    <div class="term touch"><h3>기본설정 엑셀 <span class="badge do">노란 칸만 바꿈</span></h3><p>학년, 교과, 문항 수, 피드백 글자 수처럼 선생님이 정할 값을 모은 엑셀 파일입니다. <span class="fname">0_설정\기본설정.xlsx</span></p></div>
+    <div class="term"><h3>업무 매뉴얼 <span class="badge dont">열지 않음</span></h3><p>"처리해"라고 하면 무엇을 어떻게 할지 적어 둔 파일입니다. 실습 폴더에 미리 들어 있습니다. 파일 이름은 <span class="fname">AGENTS.md</span>, 작업별 매뉴얼은 숨김 폴더 <span class="fname">.agents</span>에 있습니다.</p><p class="like"><b>비유</b>학교 업무 매뉴얼. 보조 선생님만 읽음</p></div>
+    <div class="term"><h3>서브에이전트</h3><p>Codex가 일을 나눠 맡기는 보조 AI들입니다. 단원별 출제, 반별 피드백을 동시에 하고, 검토 담당이 마지막에 점검합니다.</p></div>
+    <div class="term touch"><h3>플러그인 · 권한 <span class="badge do">처음 한 번</span></h3><p><b>플러그인</b>은 Canva 같은 다른 서비스 연결입니다. <b>권한</b>은 Codex가 폴더 밖에 손대기 전에 물어보게 하는 안전장치입니다.</p></div>
+  </div>
+
+  <h3 class="sub">"처리해"라고 하면 일어나는 일</h3>
+  <div class="flow">
+    <div class="node"><span class="k">선생님</span><b>넣는곳에 파일 넣기</b><small>워드·엑셀을 복사해 붙여 넣기</small></div>
+    <div class="node say"><span class="k">선생님</span><b>"처리해"</b><small>New chat에서 한 마디</small></div>
+    <div class="node"><span class="k">Codex</span><b>설정·매뉴얼 읽기</b><small>기본설정 엑셀과 업무 매뉴얼 확인</small></div>
+    <div class="node"><span class="k">보조 AI 여럿</span><b>나눠서 동시에</b><small>단원별 출제, 반별 피드백, 검토</small></div>
+    <div class="node"><span class="k">결과</span><b>결과 폴더에 저장</b><small>워드·엑셀 파일. 입력은 완료로</small></div>
+  </div>
+
+  <h3 class="sub">실습 폴더 생김새</h3>
+  <div class="ftree" role="list">
+    <div class="fr" role="listitem" style="--d:0"><span class="fn">📁 AI연수실습</span><span class="fd"></span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📄 ★처음 읽어 주세요.docx</span><span class="fd">사용법 한 장</span></div>
+    <div class="fr set" role="listitem" style="--d:1"><span class="fn">📁 0_설정</span><span class="fd"></span></div>
+    <div class="fr set" role="listitem" style="--d:2"><span class="fn">📗 기본설정.xlsx</span><span class="fd">선생님이 바꾸는 유일한 설정. 노란 칸만</span></div>
+    <div class="fr" role="listitem" style="--d:2"><span class="fn">📄 처리기록.csv</span><span class="fd">처리할 때마다 한 줄씩 쌓임. 엑셀로 열기</span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📁 1_시험문제</span><span class="fd"></span></div>
+    <div class="fr in" role="listitem" style="--d:2"><span class="fn">📥 넣는곳</span><span class="fd">출제계획표.xlsx, 단원 자료.docx를 여기에</span></div>
+    <div class="fr out" role="listitem" style="--d:2"><span class="fn">📤 결과</span><span class="fd">문항지·정답해설.docx, 이원목적분류표.xlsx가 여기에</span></div>
+    <div class="fr" role="listitem" style="--d:2"><span class="fn">📁 완료</span><span class="fd">처리 끝난 입력 파일 보관</span></div>
+    <div class="fr" role="listitem" style="--d:2"><span class="fn">📁 서식</span><span class="fd">학교 시험지 양식.docx를 넣으면 그 모양을 따름</span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📁 2_수업PPT</span><span class="fd">넣는곳 · 결과 · 완료</span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📁 3_수행평가피드백</span><span class="fd">넣는곳 · 결과 · 완료</span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📁 4_행사포스터</span><span class="fd">넣는곳 · 결과 · 완료</span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📁 입력양식</span><span class="fd">빈 양식 5개. 복사해서 채움</span></div>
+    <div class="fr" role="listitem" style="--d:1"><span class="fn">📁 예시자료</span><span class="fd">연수용 가상 자료</span></div>
+    <div class="fr dim" role="listitem" style="--d:1"><span class="fn">📄 AGENTS.md</span><span class="fd">업무 매뉴얼. 열지 않음</span></div>
+    <div class="fr dim" role="listitem" style="--d:1"><span class="fn">📁 .agents</span><span class="fd">작업별 매뉴얼 4개. 숨김 폴더, 열지 않음</span></div>
+  </div>
+</section>
+
+<section class="part" id="install">
+  <div class="part-head">
+    <span class="tag">연수 전 · 1단계</span>
+    <h2>설치하고 Codex 열기</h2>
+    <p>학교 PC는 설치가 막혀 있을 수 있어 연수 전에 해 옵니다. 실습 폴더(<span class="fname">AI연수실습.zip</span>)는 강사가 메신저나 공유 드라이브로 미리 나눠 줍니다.</p>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">설치 1 / 3 · 약 5분</span>
+      <h3>ChatGPT 데스크톱 앱 설치</h3>
+      <ol class="clicks">
+        <li>인터넷 창(크롬, 엣지 등)을 열고 주소창에 <a href="https://chatgpt.com/download/" target="_blank" rel="noopener">chatgpt.com/download</a>를 입력합니다.</li>
+        <li>Windows용 다운로드 단추를 누릅니다. <span class="why">Microsoft Store 앱이 저절로 열립니다. "Microsoft Store를 여시겠습니까?"라고 물으면 열기를 누릅니다.</span></li>
+        <li>Store 화면의 <span class="btn">받기</span>(또는 <span class="btn">설치</span>)를 누릅니다. <span class="why">파란 막대가 끝까지 차면 설치가 끝난 것입니다.</span></li>
+        <li><span class="btn">열기</span>를 누릅니다. <span class="why">다음부터는 시작 단추에서 ChatGPT를 찾아 엽니다.</span></li>
+      </ol>
+      <p class="warn">Microsoft Store가 막힌 학교 PC는 정보 담당 선생님께 설치를 부탁하거나 개인 노트북을 씁니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">Microsoft Store</span><span class="dots">●●●</span></div>
+        <div style="padding:16px;display:grid;gap:10px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="logo" style="background:var(--ink)">G</div>
+            <div><b>ChatGPT</b><br><small style="color:var(--muted)">OpenAI</small></div>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+            <span class="btn mk" style="padding:6px 18px">받기</span><span class="pen">여기를 누름</span>
+          </div>
+          <div style="height:36px;border-radius:6px;background:var(--chrome)"></div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 실제 배치와 문구는 조금 다를 수 있습니다.</figcaption>
+    </figure>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">설치 2 / 3 · 약 2분</span>
+      <h3>ChatGPT 계정으로 로그인</h3>
+      <ol class="clicks">
+        <li>앱 첫 화면에서 로그인(Sign in)을 누릅니다.</li>
+        <li>인터넷 창이 열리면 평소 쓰는 ChatGPT 계정으로 로그인하고 허용을 누릅니다. <span class="why">계정이 없으면 같은 화면에서 이메일로 가입합니다.</span></li>
+        <li>"앱으로 돌아가기" 같은 안내가 뜨면 누릅니다. 앱 화면으로 돌아오면 끝입니다.</li>
+      </ol>
+      <p class="note">무료 계정도 쓸 수 있지만 보조 AI 여럿이 동시에 일하면 사용량이 빨리 찹니다. 실습에는 Plus 이상 요금제를 권합니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">ChatGPT</span><span class="dots">●●●</span></div>
+        <div style="padding:24px 16px;display:grid;gap:12px;justify-items:center;text-align:center">
+          <b style="font-size:15px">ChatGPT에 오신 것을 환영합니다</b>
+          <span class="btn mk" style="padding:6px 22px">Sign in</span>
+          <span class="pen">평소 쓰는 ChatGPT 계정</span>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림</figcaption>
+    </figure>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">설치 3 / 3 · 약 1분</span>
+      <h3>왼쪽 위에서 Codex로 바꾸기</h3>
+      <ol class="clicks">
+        <li>앱 왼쪽 세로 메뉴(사이드바) 맨 위의 <span class="btn">ChatGPT ▾</span>를 누릅니다.</li>
+        <li>펼쳐진 목록에서 <span class="btn">Codex</span>를 누릅니다.</li>
+        <li>사이드바에 <b>New chat, Projects, Scheduled, Plugins</b>가 보이면 성공입니다.</li>
+      </ol>
+      <p class="note">처음 Codex를 열 때 Windows가 "이 앱이 디바이스를 변경하도록 허용하시겠어요?"라고 물을 수 있습니다. Codex가 안전 구역(샌드박스)을 만드는 과정이라 <span class="btn">예</span>를 누릅니다. 관리자 비밀번호를 물으면 정보 담당 선생님께 부탁합니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">ChatGPT</span><span class="dots">●●●</span></div>
+        <div class="app">
+          <div class="side">
+            <div class="row switch mk">Codex <span>▾</span></div>
+            <div class="menu" style="margin:4px 0 6px"><div>ChatGPT</div><div class="on">Codex</div></div>
+            <div class="row"><i>✎</i>New chat</div>
+            <div class="row"><i>▣</i>Projects</div>
+            <div class="row"><i>◷</i>Scheduled</div>
+            <div class="row"><i>⊞</i>Plugins</div>
+          </div>
+          <div class="main" style="align-content:end">
+            <span class="pen">Codex로 바꾸면 메뉴가 이렇게</span>
+            <div class="composer"><span class="ph">무엇을 할까요?</span></div>
+          </div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 공식 안내의 사이드바 구성을 따랐습니다.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="tour">
+  <div class="part-head">
+    <span class="tag">처음 열었을 때 · 3분</span>
+    <h2>Codex 화면 둘러보기</h2>
+    <p>Codex 화면은 왼쪽 메뉴, 가운데 대화, 아래 입력창 세 부분입니다. 번호 순서대로 위치를 익혀 두세요.</p>
+  </div>
+  <div class="step">
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">ChatGPT · Codex</span><span class="dots">●●●</span></div>
+        <div class="app" style="min-height:300px">
+          <div class="side">
+            <div class="row switch"><span><span class="num">1</span> Codex</span><span>▾</span></div>
+            <div class="row"><span class="num">2</span>New chat</div>
+            <div class="row"><span class="num">3</span>Projects</div>
+            <div class="row"><span class="num">4</span>Scheduled</div>
+            <div class="row"><span class="num">5</span>Plugins</div>
+            <div class="label">PROJECTS</div>
+            <div class="row"><span class="num">6</span>AI연수실습</div>
+          </div>
+          <div class="main" style="align-content:space-between">
+            <div style="display:grid;gap:8px">
+              <div class="bubble">처리해</div>
+              <div style="display:flex;gap:6px;align-items:center"><span class="num">7</span><small>Codex의 답과 진행 상황이 여기에 쌓임</small></div>
+            </div>
+            <div class="composer">
+              <span class="ph"><span class="num">8</span> 무엇을 할까요?</span>
+              <div class="tools"><span class="chip">＋</span><span class="chip"><span class="num">9</span> Ask for approval ▾</span><span class="send">↑</span><span class="num">10</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 실제 배치는 앱 버전에 따라 조금 다를 수 있습니다.</figcaption>
+    </figure>
+    <div class="step-text">
+      <div class="tbl"><table style="min-width:0">
+        <thead><tr><th style="width:44px">번호</th><th>이름</th><th>하는 일</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td><b>제품 전환</b></td><td>ChatGPT와 Codex를 바꿈. 늘 Codex로 둡니다</td></tr>
+          <tr><td>2</td><td><b>New chat</b></td><td>새 대화 열기. 일 하나에 대화 하나</td></tr>
+          <tr><td>3</td><td><b>Projects</b></td><td>프로젝트 목록 보기, 새 프로젝트(폴더 연결) 만들기</td></tr>
+          <tr><td>4</td><td><b>Scheduled</b></td><td>예약해 둔 일과 실행 기록</td></tr>
+          <tr><td>5</td><td><b>Plugins</b></td><td>Canva 같은 다른 서비스 연결</td></tr>
+          <tr><td>6</td><td><b>프로젝트 이름</b></td><td>누르면 그 프로젝트의 대화들이 보임</td></tr>
+          <tr><td>7</td><td><b>대화 내용</b></td><td>답, 보조 AI 진행 상황, 승인 요청이 나옴</td></tr>
+          <tr><td>8</td><td><b>입력창</b></td><td>여기에 글을 씀. <kbd>Enter</kbd>는 보내기, <kbd>Shift</kbd>+<kbd>Enter</kbd>는 줄바꿈</td></tr>
+          <tr><td>9</td><td><b>권한</b></td><td>Ask for approval로 둠</td></tr>
+          <tr><td>10</td><td><b>보내기</b></td><td>입력한 글 보내기. 일하는 중에는 멈춤(■) 단추로 바뀌어 작업을 멈출 수 있음</td></tr>
+        </tbody></table></div>
+    </div>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <h3>일을 시키면 이렇게 진행됩니다</h3>
+      <ol class="clicks">
+        <li><b>진행 표시</b>: 무엇을 읽고 있는지, 어떤 보조 AI가 일하는지 한 줄씩 나타납니다. 지켜보지 않아도 됩니다.</li>
+        <li><b>승인 요청</b>: 테두리 상자가 뜨고 Codex가 하려는 일이 적혀 있습니다. 읽어 보고 허용(Allow, Approve) 또는 거절(Deny)을 누릅니다. <span class="why">누르기 전까지 일이 멈춰 있으니, 한동안 진행이 없으면 화면을 아래로 내려 승인 요청이 있는지 봅니다.</span></li>
+        <li><b>끝났다는 표시</b>: 보내기 단추(↑)가 다시 보이고, 마지막에 "만든 파일과 확인할 점" 표가 나옵니다.</li>
+      </ol>
+      <p class="tip">기다리는 동안 다른 창에서 다른 일을 해도 됩니다. 단, <b>앱을 닫거나 노트북 덮개를 닫으면</b> 일이 멈춥니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">AI연수실습 · 처리해</span><span class="dots">●●●</span></div>
+        <div class="main">
+          <div class="bubble">처리해</div>
+          <small style="color:var(--muted)">0_설정\기본설정.xlsx 읽는 중…</small>
+          <div class="approve mk" style="background:#FFF8F7">
+            <b>승인 요청</b>
+            <span>1_시험문제\결과 폴더에 Word 파일을 만들기 위해 프로그램을 실행하려고 합니다.</span>
+            <div class="acts"><span class="yes">허용</span><span class="no">거절</span></div>
+          </div>
+          <span class="pen">읽어 보고 누르기</span>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 실제 문구와 단추 이름은 다를 수 있습니다.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="folders">
+  <div class="part-head">
+    <span class="tag">연수 전 · 2단계</span>
+    <h2>프로젝트와 폴더 연결</h2>
+    <p>Codex는 프로젝트에 연결한 폴더만 열어 봅니다. 언제 프로젝트를 만들고, 내 컴퓨터 폴더를 어떻게 연결하는지 순서대로 봅니다.</p>
+  </div>
+
+  <h3 class="sub" style="margin-top:0">언제 무엇을 쓰나</h3>
+  <div class="tbl">
+    <table>
+      <thead><tr><th style="width:32%">이럴 때</th><th style="width:28%">이렇게</th><th>예</th></tr></thead>
+      <tbody>
+        <tr><td>같은 종류의 일을 자주 하고 파일이 계속 쌓인다</td><td><b>프로젝트</b> 만들고 업무 폴더 연결</td><td>수행평가 피드백, 시험 출제, 행사 준비</td></tr>
+        <tr><td>파일 몇 개만 잠깐 보여 주고 묻고 싶다</td><td>이미 만든 프로젝트 폴더에 파일을 넣고 이름으로 부탁</td><td>"공문.pdf를 세 줄로 요약해 줘"</td></tr>
+        <tr><td>파일 없이 질문이나 글만 필요하다</td><td>왼쪽 위를 <b>ChatGPT</b>로 바꿔 대화</td><td>가정통신문 인사말 아이디어</td></tr>
+        <tr><td>서로 관계없는 업무 둘</td><td>프로젝트를 따로 만들기</td><td>"2학년 영어", "동아리 행사"</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="note" style="margin-top:12px">한 업무에 프로젝트 하나, 한 가지 일에 대화(New chat) 하나가 기본입니다. 연수에서는 <b>AI연수실습</b> 프로젝트 하나로 모든 실습을 합니다.</p>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">폴더 1 / 4 · 약 2분</span>
+      <h3>실습 폴더 압축 풀기</h3>
+      <ol class="clicks">
+        <li>강사가 보낸 <span class="fname">AI연수실습.zip</span>을 내려받습니다. <span class="why">보통 <b>다운로드</b> 폴더에 저장됩니다. 파일 탐색기 왼쪽에서 다운로드를 누르면 보입니다.</span></li>
+        <li>파일을 오른쪽 클릭 → <span class="btn">압축 풀기</span>를 누릅니다.</li>
+        <li>풀 위치 칸 옆 <span class="btn">찾아보기</span> → 왼쪽에서 <b>바탕 화면</b> → <span class="btn">폴더 선택</span> → <span class="btn">압축 풀기</span>.</li>
+        <li>바탕화면의 <b>AI연수실습</b> 폴더를 열어 <span class="fname">0_설정</span>, <span class="fname">1_시험문제</span> 같은 폴더가 바로 보이는지 확인합니다.</li>
+      </ol>
+      <p class="warn">폴더를 열었더니 AI연수실습 폴더가 한 번 더 들어 있으면, 안쪽 폴더를 바탕화면으로 꺼냅니다. 업무 매뉴얼(AGENTS.md)이 맨 위 칸에 있어야 Codex가 읽습니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">파일 탐색기 › 바탕 화면 › AI연수실습</span><span class="dots">●●●</span></div>
+        <div class="files">
+          <div>📁 0_설정</div><div>📁 1_시험문제</div><div>📁 2_수업PPT</div><div>📁 3_수행평가피드백</div><div>📁 4_행사포스터</div>
+          <div>📁 예시자료</div><div>📁 입력양식</div>
+          <div class="dim">📁 .agents</div>
+          <div class="mk" style="justify-self:start;padding:0 4px">📄 AGENTS.md</div>
+          <div>📄 ★처음 읽어 주세요.docx</div>
+        </div>
+      </div>
+      <figcaption>.agents는 숨김 폴더라 안 보여도 괜찮습니다.</figcaption>
+    </figure>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">폴더 2 / 4 · 약 1분</span>
+      <h3>프로젝트 만들기 = 폴더 연결</h3>
+      <ol class="clicks">
+        <li>사이드바에서 <span class="btn">Projects</span>를 누릅니다.</li>
+        <li><span class="btn">Add new project</span>를 누릅니다. <span class="why">단축키 <kbd>Ctrl</kbd>+<kbd>O</kbd>도 같습니다. "폴더 선택" 창이 뜹니다.</span></li>
+        <li>창 왼쪽에서 <b>바탕 화면</b>을 누르고, 오른쪽의 <b>AI연수실습</b> 폴더를 <b>한 번만</b> 클릭합니다.</li>
+        <li>오른쪽 아래 <span class="btn">폴더 선택</span>을 누릅니다. <span class="why">두 번 클릭해서 폴더 안으로 들어가 버렸다면 위쪽 주소 줄에서 "바탕 화면"을 눌러 한 칸 나온 뒤 다시 합니다.</span></li>
+        <li>사이드바 PROJECTS 아래에 <b>AI연수실습</b>이 생기면 연결 끝입니다.</li>
+      </ol>
+      <p class="note">바탕화면뿐 아니라 <b>문서</b>, <b>D 드라이브</b> 등 내 PC의 어느 폴더든 같은 방법으로 연결합니다. OneDrive 폴더라면 구름 표시만 있는 파일은 먼저 내려받아 둡니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">ChatGPT · Codex</span><span class="dots">●●●</span></div>
+        <div class="app">
+          <div class="side">
+            <div class="row switch">Codex <span>▾</span></div>
+            <div class="row"><i>✎</i>New chat</div>
+            <div class="row mk"><i>▣</i>Projects</div>
+            <div class="row"><i>◷</i>Scheduled</div>
+            <div class="row"><i>⊞</i>Plugins</div>
+            <div class="label">PROJECTS</div>
+            <div class="row"><i>▸</i>AI연수실습</div>
+          </div>
+          <div class="main">
+            <b>Projects</b>
+            <span class="btn mk" style="justify-self:start;padding:5px 12px">+ Add new project</span>
+            <div class="win" style="font-size:12px;box-shadow:none">
+              <div class="win-bar"><span class="t">폴더 선택</span></div>
+              <div class="files"><div class="dim">바탕 화면 ›</div><div class="mk" style="justify-self:start;padding:0 4px">📁 AI연수실습</div></div>
+              <div style="display:flex;justify-content:flex-end;padding:0 10px 10px"><span class="btn mk">폴더 선택</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림</figcaption>
+    </figure>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">폴더 3 / 4 · 필요할 때</span>
+      <h3>내 컴퓨터의 다른 폴더 더 연결하기</h3>
+      <p>이미 만든 프로젝트에 업무 폴더를 하나 더 붙이는 방법입니다. 예를 들어 <span class="fname">D:\2026\2학년 수행평가</span>의 점수표를 실습 폴더에서 쓰고 싶을 때입니다.</p>
+      <ol class="clicks">
+        <li>사이드바 PROJECTS의 <b>AI연수실습</b>에 마우스를 올리면 오른쪽 끝에 <span class="btn">⋯</span>(더보기)가 나타납니다. 누릅니다.</li>
+        <li>메뉴에서 <span class="btn">Edit project</span>를 누릅니다.</li>
+        <li>연결된 폴더 목록 아래 <span class="btn">Add folder</span>를 누릅니다.</li>
+        <li>폴더 선택 창에서 연결할 폴더(예: <span class="fname">2학년 수행평가</span>)를 한 번 클릭하고 <span class="btn">폴더 선택</span>을 누릅니다.</li>
+        <li>목록에 두 폴더가 보이면 끝입니다. <b>AI연수실습</b> 옆에 기본 폴더(primary) 표시가 있는지 확인합니다.</li>
+      </ol>
+      <div class="good"><b>기본 폴더가 중요한 이유</b><br>Codex는 새 대화를 기본 폴더에서 시작하고, 업무 매뉴얼도 기본 폴더에서만 찾아 읽습니다. 그래서 <b>AI연수실습을 기본 폴더</b>로 두고 자료 폴더는 추가 폴더로 붙입니다. 바꾸려면 폴더에 마우스를 올리고 <span class="btn">Make primary</span>를 누릅니다.</div>
+      <p>연결한 뒤에는 이렇게 부탁합니다.</p>
+      <div class="say-box"><span class="lbl">입력</span><span class="words">2학년 수행평가 폴더의 3반 점수표를 피드백 넣는곳에 복사하고 처리해</span><button type="button" data-copy="2학년 수행평가 폴더의 3반 점수표를 피드백 넣는곳에 복사하고 처리해">복사</button></div>
+      <p class="warn">연결한 폴더는 Codex가 읽고 <b>고칠 수도</b> 있습니다. 성적 원본이 있는 폴더는 연결하지 말고, 번호만 남긴 복사본 폴더를 연결하세요.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">ChatGPT · Codex</span><span class="dots">●●●</span></div>
+        <div class="app">
+          <div class="side">
+            <div class="row switch">Codex <span>▾</span></div>
+            <div class="row"><i>✎</i>New chat</div>
+            <div class="row"><i>▣</i>Projects</div>
+            <div class="label">PROJECTS</div>
+            <div class="row mk"><i>▸</i>AI연수실습<i class="more">⋯</i></div>
+            <div class="menu" style="margin-top:4px"><div class="on">Edit project</div><div>Archive chats</div></div>
+          </div>
+          <div class="main">
+            <b>Edit project</b>
+            <div class="folder-row"><span>📁 바탕 화면\AI연수실습</span><span class="tagp">primary</span></div>
+            <div class="folder-row"><span>📁 D:\2026\2학년 수행평가</span><span class="chip">Make primary</span></div>
+            <span class="btn mk" style="justify-self:start;padding:4px 12px">+ Add folder</span>
+            <span class="pen">자료 폴더를 하나 더</span>
+          </div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 공식 안내: 프로젝트 메뉴 → Edit project → Add folder, 기본 폴더 바꾸기는 Make primary</figcaption>
+    </figure>
+  </div>
+
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">폴더 4 / 4</span>
+      <h3>대화 열고 정리하기</h3>
+      <ol class="clicks">
+        <li>사이드바의 <b>AI연수실습</b>을 먼저 누른 뒤 <span class="btn">New chat</span>을 누르면 이 프로젝트 안에서 대화가 열립니다. <span class="why">대화 화면 어딘가에 AI연수실습이 표시되는지 확인합니다.</span></li>
+        <li>지난 대화는 프로젝트 아래에 쌓입니다. 자주 여는 대화는 고정(Pin)하고, 이름을 "3반 피드백"처럼 바꿔 둡니다.</li>
+        <li>끝난 대화는 보관(Archive)합니다. 되살릴 때는 <b>Settings → Archived chats</b>에서 찾습니다.</li>
+      </ol>
+      <p class="note">프로젝트를 고르지 않고 Recents 옆 New chat으로 열면 폴더가 연결되지 않은 대화입니다. 그 대화에서는 "처리해"가 작동하지 않습니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">AI연수실습 · New chat</span><span class="dots">●●●</span></div>
+        <div class="main">
+          <div class="composer">
+            <span class="ph">무엇을 할까요?</span>
+            <div class="tools"><span class="chip">＋</span><span class="chip mk">📁 AI연수실습</span><span class="chip">Ask for approval ▾</span><span class="send">↑</span></div>
+          </div>
+          <span class="pen">이 폴더에서 일하는 대화인지 확인</span>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="perm">
+  <div class="part-head">
+    <span class="tag">연수 전 · 3단계</span>
+    <h2>권한 정하고 Canva 연결</h2>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">권한 · 약 1분</span>
+      <h3>Ask for approval로 두기</h3>
+      <ol class="clicks">
+        <li>사이드바 <b>AI연수실습</b> → <span class="btn">New chat</span>을 엽니다.</li>
+        <li>입력창 바로 아래의 권한 단추를 누릅니다. <span class="why">처음에는 현재 모드 이름이 적혀 있습니다.</span></li>
+        <li>펼쳐진 목록에서 <span class="btn">Ask for approval</span>을 누릅니다.</li>
+      </ol>
+      <div class="tbl"><table style="min-width:0">
+        <thead><tr><th>모드</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr><td><b>Ask for approval</b></td><td>연결된 폴더 안에서만 일하고, 밖으로 나가야 하면 먼저 물어봄. <b>이것으로 씀</b></td></tr>
+          <tr><td>Approve for me</td><td>같은 범위에서, 물어볼 일을 자동 검토에 맡김. 익숙해진 뒤 선택</td></tr>
+          <tr><td>Full access</td><td>폴더 제한 없음. 쓰지 않음</td></tr>
+        </tbody></table></div>
+      <p class="note">일하는 중에 승인 요청이 뜨면 한 줄 읽고 허용하거나 거절합니다. 폴더 밖 파일을 지우거나 옮기려 하면 거절합니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">AI연수실습 · New chat</span><span class="dots">●●●</span></div>
+        <div style="padding:14px;display:grid;gap:8px">
+          <div class="menu" style="justify-self:start;width:min(240px,100%)">
+            <div class="on mk">Ask for approval</div><div>Approve for me</div><div style="color:var(--muted)">Full access</div>
+          </div>
+          <div class="composer"><span class="ph">무엇을 할까요?</span><div class="tools"><span class="chip">＋</span><span class="chip mk">Ask for approval ▾</span><span class="send">↑</span></div></div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 권한 메뉴는 입력창 아래에 있습니다(공식 안내).</figcaption>
+    </figure>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <span class="step-no">Canva · 약 3분</span>
+      <h3>Canva 플러그인 설치</h3>
+      <ol class="clicks">
+        <li>Canva 계정이 없으면 먼저 canva.com에서 가입합니다. 교사 인증을 하면 교육용 기능을 무료로 쓸 수 있습니다.</li>
+        <li>앱 사이드바 <span class="btn">Plugins</span>를 누릅니다.</li>
+        <li>위쪽 검색창에 <b>Canva</b>를 입력하고, 목록의 Canva를 눌러 상세 화면을 엽니다.</li>
+        <li><span class="btn">＋</span> 단추를 눌러 설치합니다.</li>
+        <li>Canva 로그인 창이 뜨면 로그인하고 <b>허용</b>을 누릅니다. <span class="why">로그인 창이 바로 안 뜨면 처음 Canva 작업을 할 때 뜹니다.</span></li>
+        <li>설치 뒤에는 <span class="btn">New chat</span>으로 새 대화를 열어야 적용됩니다.</li>
+      </ol>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">Plugins</span><span class="dots">●●●</span></div>
+        <div style="padding:14px;display:grid;gap:10px">
+          <div class="search">🔍 Canva</div>
+          <div class="card-sm">
+            <div style="display:flex;gap:10px;align-items:center;min-width:0"><div class="logo">C</div><div style="min-width:0"><b>Canva</b><br><small style="color:var(--muted)">디자인 만들기·편집·내보내기</small></div></div>
+            <span class="btn mk" style="font-size:16px;padding:2px 10px">＋</span>
+          </div>
+          <span class="pen" style="justify-self:end">＋ 누르고 Canva 로그인</span>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="settings">
+  <div class="part-head">
+    <span class="tag">필요할 때</span>
+    <h2>기본설정 엑셀 바꾸기</h2>
+    <p>교과, 학년, 문항 수, 피드백 글자 수 같은 값은 엑셀 한 파일에서 바꿉니다. 메모장이나 코드 파일은 열지 않습니다.</p>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <ol class="clicks">
+        <li>파일 탐색기에서 <span class="fname">AI연수실습</span> → <span class="fname">0_설정</span> → <span class="fname">기본설정.xlsx</span>를 두 번 클릭해 엑셀로 엽니다. <span class="why">위쪽에 노란 띠로 "보호된 보기"가 뜨면 <span class="btn">편집 사용</span>을 누릅니다.</span></li>
+        <li>화면 아래쪽 시트 탭(<b>공통 · 시험문제 · 수업PPT · 피드백 · 행사포스터</b>)에서 바꿀 시트를 누릅니다.</li>
+        <li><b>노란 칸</b>만 바꿉니다. 노란 칸을 눌렀을 때 오른쪽에 ▾가 생기면 그것을 눌러 목록에서 고릅니다. 숫자 칸은 지우고 새 숫자를 칩니다.</li>
+        <li><kbd>Ctrl</kbd>+<kbd>S</kbd>로 저장하고 <b>엑셀을 닫습니다</b>. <span class="why">엑셀이 열려 있으면 Codex가 파일을 못 읽을 수 있습니다.</span></li>
+        <li>바꾼 값은 다음 "처리해"부터 적용됩니다.</li>
+      </ol>
+      <div class="tbl"><table style="min-width:0">
+        <thead><tr><th>시트</th><th>바꿀 수 있는 값</th></tr></thead>
+        <tbody>
+          <tr><td><b>공통</b></td><td>학교급, 학년, 교과, 학교 이름(문서 머리말)</td></tr>
+          <tr><td><b>시험문제</b></td><td>선지 수, 서답형 포함, 총점, 해설 자세히/간단히, 풀이 검증</td></tr>
+          <tr><td><b>수업PPT</b></td><td>슬라이드 장수, 학습지 함께 만들기, 확인 퀴즈</td></tr>
+          <tr><td><b>피드백</b></td><td>용도(학생 안내용·생기부 초안·둘 다), 문장 수, 최대 글자 수, 말투, 쓰지 않을 표현</td></tr>
+          <tr><td><b>행사포스터</b></td><td>시안 수, 크기, 홍보 문구 함께 만들기</td></tr>
+        </tbody></table></div>
+      <p class="note">한 번만 다르게 하고 싶으면 설정을 바꾸지 말고 말로 합니다. 예: "이번 시험은 4지선다로 처리해"</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">기본설정.xlsx - Excel</span><span class="dots">●●●</span></div>
+        <div style="padding:10px;overflow-x:auto">
+          <b style="font-size:13px">기본설정 · 피드백</b>
+          <table class="xl" style="margin-top:6px">
+            <tr><td class="rn"></td><th>항목</th><th>값</th><th>설명</th></tr>
+            <tr><td class="rn">5</td><td>용도</td><td class="y mk">둘 다 ▾</td><td>학생 안내용 / 생기부 초안 / 둘 다</td></tr>
+            <tr><td class="rn">6</td><td>문장 수</td><td class="y">3</td><td>잘한 점, 보완점, 제안</td></tr>
+            <tr><td class="rn">7</td><td>최대 글자 수</td><td class="y">300</td><td>공백 포함</td></tr>
+            <tr><td class="rn">8</td><td>말투</td><td class="y">존댓말 ▾</td><td></td></tr>
+          </table>
+        </div>
+        <div class="sheet-tabs"><span>공통</span><span>시험문제</span><span>수업PPT</span><span class="on">피드백</span><span>행사포스터</span></div>
+      </div>
+      <figcaption>노란 칸만 바꾸고, 아래 탭으로 시트를 옮겨 다닙니다.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="lab-a">
+  <div class="part-head">
+    <span class="tag">실습 A · 10분</span>
+    <h2>첫 실행: 준비가 됐는지 확인</h2>
+    <p>Codex가 설정 엑셀과 업무 매뉴얼을 제대로 읽는지 물어봅니다. 처음 글을 보내 보는 연습이기도 합니다.</p>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <ol class="clicks">
+        <li>사이드바 <b>AI연수실습</b> → <span class="btn">New chat</span>을 누릅니다.</li>
+        <li>입력창 아래 권한이 <b>Ask for approval</b>인지 봅니다.</li>
+        <li>아래 빨간 상자의 <span class="btn">복사</span>를 누릅니다.</li>
+        <li>Codex 입력창을 한 번 클릭하고 <kbd>Ctrl</kbd>+<kbd>V</kbd>로 붙여 넣은 뒤 <kbd>Enter</kbd>를 누릅니다. <span class="why">직접 타자로 쳐도 됩니다. 띄어쓰기나 말투는 조금 달라도 괜찮습니다.</span></li>
+        <li>답이 끝날 때까지 기다립니다. 보통 1분 안에 끝납니다.</li>
+      </ol>
+      <div class="say-box"><span class="lbl">입력</span><span class="words">이 폴더에서 할 수 있는 일과 지금 설정을 표로 알려 줘</span><button type="button" data-copy="이 폴더에서 할 수 있는 일과 지금 설정을 표로 알려 줘">복사</button></div>
+      <div class="check"><b>이렇게 나오면 성공</b><ul><li>작업 폴더 4개와 넣을 파일이 표로 나온다</li><li>"고등학교 2학년 영어" 같은 현재 설정값이 보인다</li></ul></div>
+      <p class="note">엉뚱한 답이 나오면 프로젝트를 고른 뒤 대화를 열었는지, 실습 폴더가 기본 폴더인지 확인합니다(<a href="#folders">프로젝트와 폴더</a>).</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">AI연수실습</span><span class="dots">●●●</span></div>
+        <div class="main">
+          <div class="bubble">이 폴더에서 할 수 있는 일과 지금 설정을 표로 알려 줘</div>
+          <div class="tbl"><table style="min-width:0;font-size:12px">
+            <tr><th>폴더</th><th>넣을 파일</th><th>나오는 파일</th></tr>
+            <tr><td>1_시험문제</td><td>출제계획표, 단원 자료</td><td>문항지, 분류표</td></tr>
+            <tr><td>3_수행평가피드백</td><td>채점기준표, 반 점수표</td><td>반별 피드백 엑셀</td></tr>
+            <tr><td colspan="3">설정: 고등학교 2학년 영어 · 5지선다 · 피드백 300자</td></tr>
+          </table></div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="lab-b">
+  <div class="part-head">
+    <span class="tag">실습 B · 20분</span>
+    <h2>시험문제: 단원별 AI가 동시에 출제</h2>
+    <p>단원마다 출제 AI가 하나씩, 정답을 모르는 풀이 AI가 직접 풀어 보고, 검토 AI가 마지막에 점검합니다.</p>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <div class="io">
+        <div class="in"><h4>넣을 파일 · 예시자료 → 1_시험문제용</h4><ul><li>출제계획표.xlsx</li><li>1단원_색의온도.docx</li><li>2단원_판화.docx</li><li>3단원_도자기.docx</li></ul><small>내 자료로 할 때: 입력양식의 출제계획표_양식.xlsx를 복사해 채움. 한글 파일은 Word나 PDF로 저장해서 넣음</small></div>
+        <div class="out"><h4>나오는 결과 · 1_시험문제 → 결과</h4><ul><li>문항지.docx (정답 없음, 인쇄용)</li><li>정답해설.docx</li><li>이원목적분류표.xlsx</li><li>검토보고서.docx</li></ul></div>
+      </div>
+      <ol class="clicks">
+        <li>오른쪽 파일 탐색기에서 <span class="fname">예시자료</span> → <span class="fname">1_시험문제용</span>을 엽니다.</li>
+        <li><kbd>Ctrl</kbd>+<kbd>A</kbd>로 4개를 모두 고르고 <kbd>Ctrl</kbd>+<kbd>C</kbd>로 복사합니다.</li>
+        <li>위쪽 주소 줄에서 <b>AI연수실습</b>을 눌러 나온 뒤 <span class="fname">1_시험문제</span> → <span class="fname">넣는곳</span>을 엽니다. 빈 곳을 한 번 누르고 <kbd>Ctrl</kbd>+<kbd>V</kbd>로 붙여 넣습니다.</li>
+        <li>왼쪽 앱에서 <b>AI연수실습</b> → <span class="btn">New chat</span> → "처리해"를 입력하고 <kbd>Enter</kbd>.</li>
+        <li>출제 AI 3개가 동시에 일하는 표시가 나옵니다. 하나를 누르면 그 AI의 작업만 따로 볼 수 있습니다.</li>
+        <li>승인 요청이 뜨면 한 줄 읽고 허용합니다. 다 끝나기까지 보통 5~10분 걸립니다.</li>
+      </ol>
+      <div class="say-box"><span class="lbl">입력</span><span class="words">처리해</span><button type="button" data-copy="처리해">복사</button></div>
+      <div class="check"><b>이렇게 되면 성공</b><ul><li>대화 마지막에 만든 파일 4개와 확인할 점 표가 나온다</li><li><span class="fname">1_시험문제\결과</span>에 날짜가 붙은 워드 3개, 엑셀 1개가 있다</li><li><span class="fname">넣는곳</span>은 비고, 입력 파일은 <span class="fname">완료</span>로 옮겨져 있다</li></ul></div>
+      <p class="tip">학교 시험지 양식이 있으면 <span class="fname">1_시험문제\서식</span>에 .docx로 넣어 두세요. 문항지가 그 머리말과 2단 구성을 따릅니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">AI연수실습 · 처리해</span><span class="dots">●●●</span></div>
+        <div class="main">
+          <div class="bubble">처리해</div>
+          <small style="color:var(--muted)">1_시험문제 넣는곳에서 파일 4개를 찾았습니다. 출제계획표대로 3개 단원을 나눠 출제합니다.</small>
+          <div class="mk" style="display:grid;gap:5px;padding:6px;background:transparent">
+            <div class="agent"><span>출제 · 1단원</span><em>작성 중</em></div>
+            <div class="agent"><span>출제 · 2단원</span><em>작성 중</em></div>
+            <div class="agent"><span>출제 · 3단원</span><span class="st">완료</span></div>
+          </div>
+          <div class="agent"><span>풀이 · 정답 대조</span><em>대기</em></div>
+          <div class="agent"><span>검토</span><em>대기</em></div>
+          <span class="pen">셋이 동시에, 풀이·검토는 나중에</span>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림 · 앱은 보조 AI마다 작업 내용을 따로 보여 줍니다.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="lab-c">
+  <div class="part-head">
+    <span class="tag">실습 C · 15분</span>
+    <h2>수업 PPT: 지도안 넣으면 Canva 슬라이드와 학습지</h2>
+    <p>구성안·학습지는 워드로, 슬라이드는 선생님 Canva 계정에 만들어집니다. 실습 B 결과가 있으면 마지막 확인 퀴즈에 그 문항을 씁니다.</p>
+  </div>
+  <div class="step solo">
+    <div class="step-text">
+      <div class="io">
+        <div class="in"><h4>넣을 파일 · 예시자료 → 2_수업PPT용</h4><ul><li>수업지도안_판화.docx</li></ul><small>내 지도안: 학교 양식 그대로 넣거나 입력양식의 수업지도안_양식.docx 사용</small></div>
+        <div class="out"><h4>나오는 결과 · 2_수업PPT → 결과</h4><ul><li>구성안.docx (맨 위에 Canva 링크)</li><li>학습지.docx</li><li>Canva 프레젠테이션</li></ul></div>
+      </div>
+      <ol class="clicks">
+        <li>수업지도안_판화.docx를 복사해 <span class="fname">2_수업PPT\넣는곳</span>에 붙여 넣습니다.</li>
+        <li><span class="btn">New chat</span>에서 아래 한 마디를 입력합니다. <span class="why">"수업PPT만"이라고 하면 다른 폴더는 건드리지 않습니다.</span></li>
+        <li>Canva 사용 승인 요청이 뜨면 허용합니다.</li>
+        <li>결과 폴더의 구성안.docx를 열고, 맨 위 Canva 링크를 <kbd>Ctrl</kbd>을 누른 채 클릭합니다. 인터넷 창에서 Canva가 열립니다.</li>
+        <li>Canva에서 글꼴·사진·배치를 직접 다듬습니다. 수업 때는 Canva의 프레젠테이션(발표) 단추로 띄웁니다.</li>
+      </ol>
+      <div class="say-box"><span class="lbl">입력</span><span class="words">수업PPT만 처리해</span><button type="button" data-copy="수업PPT만 처리해">복사</button></div>
+      <div class="check"><b>이렇게 되면 성공</b><ul><li>구성안.docx에 장별 표와 Canva 링크가 있다</li><li>링크를 열면 10장 안팎의 슬라이드가 보인다</li><li>학습지.docx에 활동별 빈칸이 있다</li></ul></div>
+      <p class="note">Canva 연결이 안 되어 있으면 구성안과 학습지까지만 만들고 확인필요 메모를 남깁니다. <a href="#perm">Canva 연결</a>을 마친 뒤 "수업PPT만 다시 처리해"라고 합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="lab-d">
+  <div class="part-head">
+    <span class="tag">실습 D · 15분</span>
+    <h2>수행평가 피드백: 반마다, 10명씩 나눠 동시에</h2>
+    <p>예시는 가상 학생 2개 반입니다. 반 파일마다 결과 엑셀이 하나씩 나옵니다.</p>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <div class="io">
+        <div class="in"><h4>넣을 파일 · 예시자료 → 3_수행평가피드백용</h4><ul><li>채점기준표_판화발표.xlsx</li><li>2학년3반_점수표.xlsx</li><li>2학년4반_점수표.xlsx</li></ul><small>내 자료로 할 때: 입력양식의 학생점수표_양식.xlsx에 번호·점수·메모만 씀. 이름 열이 있으면 처리하지 않음</small></div>
+        <div class="out"><h4>나오는 결과 · 3_수행평가피드백 → 결과</h4><ul><li>피드백_2학년3반.xlsx</li><li>피드백_2학년4반.xlsx</li></ul><small>파일마다 시트 3개: 피드백 · 반경향 · 확인필요</small></div>
+      </div>
+      <ol class="clicks">
+        <li>엑셀 파일 3개를 복사해 <span class="fname">3_수행평가피드백\넣는곳</span>에 붙여 넣습니다.</li>
+        <li><span class="btn">New chat</span>에서 "처리해"를 입력합니다.</li>
+        <li>끝나면 결과 엑셀을 열고 <b>피드백</b> 시트에서 학생 안내용과 생기부 초안을 읽어 봅니다. 긴 글은 칸을 누르면 위쪽 수식 입력줄에 다 보입니다.</li>
+        <li><b>글자 수</b> 칸이 설정값(300)을 넘지 않는지 봅니다.</li>
+        <li>아래 시트 탭의 <b>확인필요</b>를 눌러 미제출, 점수 오류, 메모 없는 학생을 확인합니다.</li>
+        <li>말투가 마음에 안 들면 같은 대화에서 "3반 피드백을 더 따뜻하게, 명령조 없이 다시 써 줘"라고 씁니다.</li>
+      </ol>
+      <div class="say-box"><span class="lbl">입력</span><span class="words">처리해</span><button type="button" data-copy="처리해">복사</button></div>
+      <p class="warn">생기부 초안은 초안입니다. 학교 기재요령에 맞는지, 점수와 맞지 않는 칭찬이 없는지 한 명씩 읽고 고친 뒤 옮깁니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">피드백_2학년3반.xlsx - Excel</span><span class="dots">●●●</span></div>
+        <div style="padding:10px;overflow-x:auto">
+          <table class="xl">
+            <tr><th>번호</th><th>총점</th><th>학생 안내용</th><th>글자 수</th></tr>
+            <tr><td>1</td><td>16</td><td>판화 과정을 순서대로 정확히 설명했습니다. 마무리 문장이 없어 끝이 약합니다. 다음에는…</td><td>182</td></tr>
+            <tr><td>17</td><td>-</td><td style="color:var(--pen)">미제출</td><td></td></tr>
+          </table>
+        </div>
+        <div class="sheet-tabs"><span class="on">피드백</span><span>반경향</span><span>확인필요</span></div>
+      </div>
+      <figcaption>결과 엑셀 모양 예시</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="lab-e">
+  <div class="part-head">
+    <span class="tag">실습 E · 10분</span>
+    <h2>행사 포스터: 날짜 검사 후 시안과 홍보 문구</h2>
+    <p>날짜와 요일이 달력과 맞을 때만 시안을 만듭니다. 시안과 함께 가정통신문, 방송 원고, SNS 문구도 워드로 나옵니다.</p>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <div class="io">
+        <div class="in"><h4>넣을 파일 · 예시자료 → 4_행사포스터용</h4><ul><li>행사정보_예술제.xlsx</li></ul><small>학교 로고 그림 파일을 같이 넣으면 포스터에 씀</small></div>
+        <div class="out"><h4>나오는 결과 · 4_행사포스터 → 결과</h4><ul><li>시안.docx (시안 3개 Canva 링크, 대조표)</li><li>홍보문구.docx</li></ul></div>
+      </div>
+      <ol class="clicks">
+        <li>행사정보_예술제.xlsx를 복사해 <span class="fname">4_행사포스터\넣는곳</span>에 붙여 넣고 아래 한 마디를 입력합니다.</li>
+        <li>시안.docx를 열고 링크 세 개를 <kbd>Ctrl</kbd>+클릭으로 하나씩 열어 비교합니다.</li>
+        <li>마음에 드는 시안이 2안이면 "2안을 인쇄용 PDF로 내보내서 결과 폴더에 저장해 줘"라고 씁니다.</li>
+      </ol>
+      <div class="say-box"><span class="lbl">입력</span><span class="words">포스터만 처리해</span><button type="button" data-copy="포스터만 처리해">복사</button></div>
+      <p class="good"><b>해 보기</b>: 완료 폴더의 행사정보 엑셀을 열어 요일을 "금"에서 "토"로 바꾸고 저장·닫기 → 넣는곳에 다시 넣고 "포스터만 처리해". 시안을 만들지 않고 날짜 오류를 알려 줍니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">Canva 시안</span><span class="dots">●●●</span></div>
+        <div style="padding:14px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px">
+          <div style="aspect-ratio:1/1.414;border-radius:6px;background:linear-gradient(160deg,#F9AB00,#E37400);display:grid;place-items:end start;padding:8px;color:#2a1a00;font-weight:700;font-size:11px">1안 경쾌</div>
+          <div class="mk" style="aspect-ratio:1/1.414;background:linear-gradient(160deg,#1E3A5F,#3C6E9F);display:grid;place-items:end start;padding:8px;color:#fff;font-weight:700;font-size:11px">2안 차분</div>
+          <div style="aspect-ratio:1/1.414;border-radius:6px;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center;font-weight:900;font-size:17px">손끝에서</div>
+        </div>
+        <div style="padding:0 14px 12px"><span class="pen">골라서 고치고 내보내기</span></div>
+      </div>
+      <figcaption>시안 비교 예시 그림</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="lab-f">
+  <div class="part-head">
+    <span class="tag">실습 F · 10분</span>
+    <h2>한꺼번에, 그리고 정해진 시간에 저절로</h2>
+    <p>여러 폴더에 파일을 넣고 "처리해"라고 하면 폴더마다 AI가 하나씩 동시에 일합니다. 예약을 걸면 말하지 않아도 정해진 시간에 넣는곳을 확인합니다.</p>
+  </div>
+  <div class="step">
+    <div class="step-text">
+      <h3>① 여러 폴더 동시 처리</h3>
+      <ol class="clicks">
+        <li>예시자료의 시험문제 파일 4개와 피드백 파일 3개를 다시 복사해 각 <b>넣는곳</b>에 붙여 넣습니다.</li>
+        <li><span class="btn">New chat</span>에서 "처리해"를 입력합니다.</li>
+        <li>폴더별 AI 2개가 동시에 일하고 마지막에 폴더별 결과 표가 나옵니다. 이전 결과는 지워지지 않고 새 파일이 추가됩니다.</li>
+      </ol>
+      <h3 style="margin-top:10px">② 예약 걸기</h3>
+      <ol class="clicks">
+        <li>같은 대화에 아래 문장을 복사해 붙여 넣고 <kbd>Enter</kbd>.</li>
+        <li>사이드바 <span class="btn">Scheduled</span>를 눌러 예약이 생겼는지 봅니다. 실행할 때마다 기록이 여기에 쌓입니다.</li>
+        <li>시간을 바꾸거나 멈출 때는 Scheduled에서 그 예약을 누르거나, 대화로 "예약 멈춰 줘"라고 씁니다.</li>
+      </ol>
+      <div class="prompt"><div class="prompt-bar"><span>입력</span><button type="button" data-copy="평일 오후 4시 30분마다 시험문제와 수행평가피드백 넣는곳을 확인해서 새 파일이 있으면 처리해 줘. 없으면 아무것도 하지 마.">복사</button></div>
+<pre>평일 오후 4시 30분마다 시험문제와 수행평가피드백 넣는곳을 확인해서 새 파일이 있으면 처리해 줘. 없으면 아무것도 하지 마.</pre></div>
+      <p class="warn">예약은 <b>컴퓨터가 켜져 있고 ChatGPT 앱이 열려 있을 때만</b> 돕니다. 선생님이 자리에 없는 동안 실행되므로 승인을 받을 수 없어, 폴더 밖이나 인터넷이 필요한 단계는 실패할 수 있습니다. Canva가 필요한 PPT·포스터는 직접 "처리해"로 돌립니다.</p>
+    </div>
+    <figure class="shot">
+      <div class="win">
+        <div class="win-bar"><span class="t">ChatGPT · Codex</span><span class="dots">●●●</span></div>
+        <div class="app">
+          <div class="side">
+            <div class="row switch">Codex <span>▾</span></div>
+            <div class="row"><i>✎</i>New chat</div>
+            <div class="row"><i>▣</i>Projects</div>
+            <div class="row mk"><i>◷</i>Scheduled</div>
+            <div class="row"><i>⊞</i>Plugins</div>
+          </div>
+          <div class="main">
+            <b>Scheduled</b>
+            <div class="agent"><span>넣는곳 확인·처리</span><em>평일 16:30</em></div>
+            <div class="agent"><span>11/20 16:30 실행</span><span class="st">파일 2개 처리</span></div>
+            <span class="pen">예약과 실행 기록</span>
+          </div>
+        </div>
+      </div>
+      <figcaption>화면 예시 그림</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="part" id="results">
+  <div class="part-head">
+    <span class="tag">실습마다</span>
+    <h2>결과 확인하고 고치기</h2>
+  </div>
+  <div class="step solo">
+    <div class="step-text">
+      <h3>결과 파일 여는 두 가지 방법</h3>
+      <ol class="clicks">
+        <li><b>파일 탐색기</b>: 작업 폴더의 <span class="fname">결과</span>를 열고 파일을 두 번 클릭합니다. 워드·엑셀로 바로 열립니다. <span class="why">파일 이름 앞의 날짜(예: 2026-11-20_)로 언제 만든 것인지 압니다. "보호된 보기"가 뜨면 편집 사용을 누릅니다.</span></li>
+        <li><b>앱 안에서</b>: 대화에 표시된 결과 파일을 누르면 대화 옆에서 미리 볼 수 있습니다. 미리보기의 특정 부분을 짚어 그 부분만 고쳐 달라고 할 수도 있습니다.</li>
+      </ol>
+      <h3 style="margin-top:8px">고치는 세 가지 방법</h3>
+      <div class="tbl"><table>
+        <thead><tr><th style="width:28%">방법</th><th style="width:36%">언제</th><th>예</th></tr></thead>
+        <tbody>
+          <tr><td><b>같은 대화에서 말하기</b></td><td>몇 군데만 바꿀 때</td><td>"7번은 ②와 ④가 둘 다 정답으로 읽혀. 고쳐 줘"</td></tr>
+          <tr><td><b>워드·엑셀에서 직접</b></td><td>문장 몇 개 다듬을 때</td><td>결과 파일을 열어 바로 수정·저장</td></tr>
+          <tr><td><b>다시 처리해</b></td><td>설정을 바꾸고 처음부터</td><td>"시험문제만 다시 처리해" → 파일 이름 끝에 _2</td></tr>
+        </tbody></table></div>
+      <h3 style="margin-top:8px">꼭 보는 두 파일</h3>
+      <ol class="clicks">
+        <li><span class="fname">결과\확인필요.txt</span>: 처리하지 못한 파일과 이유가 적혀 있습니다(예: 한글 파일이라 못 읽음, 이름 열 있음). 두 번 클릭하면 메모장으로 열립니다. 이 파일이 없으면 문제없이 끝난 것입니다.</li>
+        <li><span class="fname">0_설정\처리기록.csv</span>: 언제 무엇을 처리했는지 한 줄씩 쌓입니다. 엑셀로 열립니다. 예약 실행 결과도 여기서 확인합니다.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="mywork">
+  <div class="part-head">
+    <span class="tag">연수 다음 날부터</span>
+    <h2>내 업무 폴더로 옮겨 쓰기</h2>
+    <p>실습 폴더를 그대로 업무용으로 씁니다. 예시만 지우고 내 파일을 넣으면 됩니다.</p>
+  </div>
+  <div class="step solo">
+    <div class="step-text">
+      <ol class="clicks">
+        <li><b>폴더 옮기기</b>: 바탕화면의 AI연수실습 폴더를 <kbd>Ctrl</kbd>+<kbd>C</kbd> → 파일 탐색기 왼쪽 <b>문서</b>(또는 D 드라이브)를 열고 <kbd>Ctrl</kbd>+<kbd>V</kbd>. 붙여 넣은 폴더를 오른쪽 클릭 → <b>이름 바꾸기</b> → <b>AI업무</b>. <span class="why">예시자료 폴더와 각 결과·완료 폴더 속 파일은 지워도 됩니다. 넣는곳·결과·완료 폴더 자체는 남깁니다.</span></li>
+        <li><b>새 프로젝트로 연결</b>: Projects → Add new project → 문서 → <b>AI업무</b> 한 번 클릭 → 폴더 선택.</li>
+        <li><b>설정 바꾸기</b>: <span class="fname">0_설정\기본설정.xlsx</span>에서 내 학년·교과·학교 이름을 넣고 저장·닫기.</li>
+        <li><b>양식 채우기</b>: <span class="fname">입력양식</span>의 엑셀을 복사해 채우고, 이름을 알아보기 쉽게 바꿔(예: 2학년1반_점수표.xlsx) 넣는곳에 넣습니다.</li>
+        <li><b>자료 폴더 연결(선택)</b>: 수행평가 자료가 다른 폴더에 있으면 <a href="#folders">Edit project → Add folder</a>로 붙이고, AI업무를 기본 폴더로 둡니다.</li>
+        <li><b>반복 업무는 예약</b>: 매주 같은 시간에 할 일은 실습 F처럼 예약합니다.</li>
+      </ol>
+      <h3 style="margin-top:8px">새 업무 추가하기 (예: 공문 요약)</h3>
+      <ol class="clicks">
+        <li>"AI업무 폴더에 5_공문요약 작업 폴더를 넣는곳·결과·완료와 함께 만들어 줘"라고 씁니다.</li>
+        <li>입력창에 <kbd>$skill-creator</kbd>를 입력하고 이어서 아래 예시처럼 하고 싶은 일을 설명합니다. 질문이 나오면 답합니다.</li>
+        <li>"업무 매뉴얼 표에 5_공문요약을 추가해 줘"라고 쓰면 다음부터 "처리해"에 포함됩니다.</li>
+      </ol>
+      <div class="prompt"><div class="prompt-bar"><span>$skill-creator 뒤에 입력 예시</span><button type="button" data-copy="공문 PDF나 워드를 넣으면 제목, 마감일, 해야 할 일, 담당자를 표로 정리한 워드 파일을 만드는 스킬을 만들어 줘. 폴더는 5_공문요약이야.">복사</button></div>
+<pre>공문 PDF나 워드를 넣으면 제목, 마감일, 해야 할 일, 담당자를 표로 정리한 워드 파일을 만드는 스킬을 만들어 줘. 폴더는 5_공문요약이야.</pre></div>
+      <p class="note">동료와 나눌 때는 AI업무 폴더에서 결과·완료 속 파일과 개인 자료를 지우고, 폴더를 오른쪽 클릭 → <b>압축(ZIP) 파일로 압축</b>해 보냅니다. 받은 사람은 압축을 풀고 프로젝트로 연결하면 같은 방식으로 씁니다.</p>
+    </div>
+  </div>
+</section>
+
+<section class="part" id="help">
+  <div class="part-head">
+    <span class="tag">막힐 때</span>
+    <h2>자주 나오는 문제</h2>
+  </div>
+  <div class="tbl">
+    <table>
+      <thead><tr><th style="width:34%">증상</th><th>해결</th></tr></thead>
+      <tbody>
+        <tr><td>"처리해"에 엉뚱한 답을 함</td><td>사이드바의 프로젝트를 누른 뒤 New chat을 열었는지 봅니다. Edit project에서 실습 폴더가 primary(기본 폴더)인지, 업무 매뉴얼(AGENTS.md)이 그 폴더 맨 위에 있는지 확인합니다.</td></tr>
+        <tr><td>한참 지나도 진행이 없음</td><td>화면을 아래로 내려 승인 요청이 기다리고 있는지 봅니다. 없으면 멈춤(■)을 누르고 "이어서 처리해"라고 씁니다.</td></tr>
+        <tr><td>"파일을 열 수 없다"고 함</td><td>엑셀·워드에서 그 파일이 열려 있으면 닫고 다시 "처리해"라고 씁니다.</td></tr>
+        <tr><td>한글(.hwp) 파일을 넣었더니 건너뜀</td><td>한글에서 파일 → 다른 이름으로 저장 → 파일 형식을 <b>Word 문서(.docx)</b> 또는 <b>PDF</b>로 바꿔 저장해 넣습니다.</td></tr>
+        <tr><td>이름 열 때문에 멈춤</td><td>점수표에서 이름 열을 지우고 번호만 남겨 다시 넣습니다.</td></tr>
+        <tr><td>결과가 워드·엑셀이 아니라 .html·.csv로 나옴</td><td>워드·엑셀을 만드는 도구가 PC에 없는 경우입니다. .html은 두 번 클릭하면 인터넷 창에서 열리고 내용을 복사할 수 있습니다. 계속 워드·엑셀로 받으려면 "Python을 설치해 줘"라고 쓰면 Codex가 설치를 돕습니다(관리자 승인이 필요할 수 있음).</td></tr>
+        <tr><td>파일 이름에 .docx 같은 끝 이름이 안 보임</td><td>파일 탐색기 보기 → 표시 → 파일 확장명에 체크합니다.</td></tr>
+        <tr><td>Microsoft Store가 열리지 않음</td><td>학교 PC 정책으로 막힌 경우입니다. 정보 담당 선생님께 설치를 부탁하거나 개인 노트북을 씁니다.</td></tr>
+        <tr><td>처음 실행 때 관리자 승인 창이 뜸</td><td>Codex가 안전 구역을 만드는 과정입니다. 예를 누르고, 관리자 비밀번호가 필요하면 정보 담당 선생님께 부탁합니다.</td></tr>
+        <tr><td>왼쪽 위에 Codex 선택지가 없음</td><td>Microsoft Store → 라이브러리 → 업데이트 받기로 앱을 최신 버전으로 바꾼 뒤 다시 엽니다.</td></tr>
+        <tr><td>Canva 작업을 건너뜀</td><td>Plugins에서 Canva 설치·로그인을 마쳤는지 확인하고 New chat으로 새 대화를 엽니다.</td></tr>
+        <tr><td>예약이 안 돌았음</td><td>그 시간에 컴퓨터가 꺼져 있었거나 앱이 닫혀 있었는지 봅니다. Scheduled의 실행 기록과 처리기록.csv를 확인합니다.</td></tr>
+        <tr><td>"사용량 한도" 안내가 뜸</td><td>요금제 한도에 걸린 경우입니다. 옆 사람과 짝 실습하거나 시간을 두고 다시 합니다.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <p>2026년 11월 6일 기준. 화면 그림은 공식 안내를 바탕으로 그린 예시라 실제 화면과 다를 수 있습니다. 연수 전에 강사가 실제 화면으로 한 번 따라 해 보세요.</p>
+  <ul>
+    <li><a href="https://learn.chatgpt.com/docs/app" target="_blank" rel="noopener">ChatGPT 데스크톱 앱</a> · <a href="https://learn.chatgpt.com/docs/windows/windows-app" target="_blank" rel="noopener">Windows 앱</a> · <a href="https://learn.chatgpt.com/docs/windows/windows-sandbox" target="_blank" rel="noopener">Windows 샌드박스</a> · <a href="https://learn.chatgpt.com/docs/projects" target="_blank" rel="noopener">프로젝트와 폴더</a> · <a href="https://learn.chatgpt.com/docs/permission-modes" target="_blank" rel="noopener">권한 모드</a> (OpenAI)</li>
+    <li><a href="https://learn.chatgpt.com/docs/agent-configuration/agents-md" target="_blank" rel="noopener">AGENTS.md</a> · <a href="https://learn.chatgpt.com/docs/build-skills" target="_blank" rel="noopener">스킬 만들기</a> · <a href="https://learn.chatgpt.com/docs/agent-configuration/subagents" target="_blank" rel="noopener">서브에이전트</a> · <a href="https://learn.chatgpt.com/docs/automations" target="_blank" rel="noopener">예약 작업</a> · <a href="https://learn.chatgpt.com/docs/plugins" target="_blank" rel="noopener">플러그인</a> · <a href="https://learn.chatgpt.com/docs/artifacts-viewer" target="_blank" rel="noopener">파일 미리보기</a> (OpenAI)</li>
+    <li><a href="https://canva.com/newsroom/news/deep-research-integration-mcp-server/" target="_blank" rel="noopener">Canva 플러그인 in Codex (Canva)</a></li>
+  </ul>
+</footer>
+</div>
+
+<script>
+document.querySelectorAll('button[data-copy]').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var text=btn.getAttribute('data-copy');
+    function ok(){btn.textContent='복사됨';btn.classList.add('done');setTimeout(function(){btn.textContent='복사';btn.classList.remove('done')},1600)}
+    function fallback(){var box=btn.closest('.say-box,.prompt');var t=box&&box.querySelector('.words,pre');if(t){var r=document.createRange();r.selectNodeContents(t);var s=getSelection();s.removeAllRanges();s.addRange(r)}btn.textContent='선택됨 · Ctrl+C'}
+    try{navigator.clipboard.writeText(text).then(ok,fallback)}catch(e){fallback()}
+  });
+});
+(function(){
+  var KEY='codex-guide-todo';
+  var boxes=[].slice.call(document.querySelectorAll('#todo-list input'));
+  var out=document.getElementById('todo-count');
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch(e){saved={}}
+  function count(){var n=boxes.filter(function(b){return b.checked}).length;out.textContent=n+' / '+boxes.length+' 완료'+(n===boxes.length?' · 연수 준비 끝!':'')}
+  boxes.forEach(function(b){
+    if(saved[b.id])b.checked=true;
+    b.addEventListener('change',function(){saved[b.id]=b.checked;try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}count()});
+  });
+  count();
+})();
+</script>
+
+</body></html>
